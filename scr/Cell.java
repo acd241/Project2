@@ -54,7 +54,7 @@ public class Cell {
     }
 
     public boolean hasMouse(){
-        return this.bot;
+        return this.mouse;
     }
 
     public void setMouse(boolean b){

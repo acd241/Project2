@@ -17,6 +17,7 @@ public class Mouse {
             Pair temp = s.OpenCells.get(x);
             if(!s.isBot(temp.getKey(),temp.getValue())){
                 this.pos = temp;
+                s.StartingMousePos = temp;
                 s.grid[temp.getKey()][temp.getValue()].SetState(5);
                 s.grid[temp.getKey()][temp.getValue()].setMouse(true);
                 break;
@@ -27,7 +28,6 @@ public class Mouse {
     public Pair PickRandomNeighbor(int row, int col){
         ArrayList<Pair> a = new ArrayList<Pair>();
         a.add(new Pair(row, col));
-        Random random = new Random();
         if(s.PotentialNextStep(row-1, col) == true){
             Pair p0 = new Pair(row-1, col);
             a.add(p0);
@@ -55,6 +55,7 @@ public class Mouse {
         s.grid[pos.getKey()][pos.getValue()].SetState(1);
         s.grid[pos.getKey()][pos.getValue()].setMouse(false);
         this.pos = p;
+        s.StartingMousePos= p;
         s.grid[p.getKey()][p.getValue()].setMouse(true);
         s.grid[pos.getKey()][pos.getValue()].SetState(5);
     }
