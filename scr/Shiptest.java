@@ -37,24 +37,23 @@ public class Shiptest {
         ArrayList<Pair> a = LabelAllOpenCells();
         IdentifyDeadEnds();
         int n = random.nextInt(a.size());
-        int n1 = random.nextInt(a.size());
         int n2 = random.nextInt(a.size());
+        /* 
         while(true){
-            if ((n != n1) && (n != n2) && (n1 != n2)){
+            if (n!=n2){
                 break;
             }
             else{
                 n = random.nextInt(a.size());
-                n1 = random.nextInt(a.size());
                 n2 = random.nextInt(a.size());
             }
         }
         
         BotPosition = a.get(n);
-        ButtonPostion = a.get(n1);
         StartingMousePos = a.get(n2);
         grid[BotPosition.getKey()][BotPosition.getValue()].SetState(Bot);
         grid[StartingMousePos.getKey()][StartingMousePos.getValue()].SetState(Mouse);
+        */
     }
 
     public void PopulateShip(Cell [][] g){
