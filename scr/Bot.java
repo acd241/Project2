@@ -13,14 +13,12 @@ public class Bot {
 
     public void StartingBotPosition(){
         Random random = new Random();
-        while(true){
-            int i = random.nextInt(s.grid.length);
-            int j = random.nextInt(s.grid.length);
-            if(s.isOpen(i,j) || s.isDeadEnd(i,j)){
-                Pair p = new Pair(i,j);
-                this.pos = p;
-                s.grid[i][j].setBot(true);
-            }
+        int x = random.nextInt(s.OpenCells.size());
+        Pair temp = s.OpenCells.get(x);
+        if(s.isOpen(temp.getKey(),temp.getValue()) || s.isDeadEnd(temp.getKey(),temp.getValue())){
+            this.pos = temp;
+            s.grid[temp.getKey()][temp.getValue()].SetState(3);
+            s.grid[temp.getKey()][temp.getValue()].setBot(true);
         }
     }
 

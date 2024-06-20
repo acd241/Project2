@@ -13,12 +13,12 @@ public class Mouse {
     public void StartingMousePosition(){
         Random random = new Random();
         while(true){
-            int i = random.nextInt(s.grid.length);
-            int j = random.nextInt(s.grid.length);
-            if((s.isOpen(i,j) || s.isDeadEnd(i,j)) && !s.isBot(i,j)){
-                Pair p = new Pair(i,j);
-                this.pos = p;
-                s.grid[i][j].setMouse(true);
+            int x = random.nextInt(s.OpenCells.size());
+            Pair temp = s.OpenCells.get(x);
+            if(s.isBot(temp.getKey(),temp.getValue())){
+                this.pos = temp;
+                s.grid[temp.getKey()][temp.getValue()].setMouse(true);
+                break;
             }
         }
     }

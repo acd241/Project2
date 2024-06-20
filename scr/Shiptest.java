@@ -22,6 +22,7 @@ public class Shiptest {
     public boolean [] visited;
     public int totalOpenCells;
     public boolean IsBot = false;
+    public ArrayList<Pair> OpenCells;
 
     Random random = new Random();
 
@@ -34,10 +35,10 @@ public class Shiptest {
         ExploreShip();
         IdentifyDeadEnds();
         AddExtraOpenCells();
-        ArrayList<Pair> a = LabelAllOpenCells();
+        OpenCells = LabelAllOpenCells();
         IdentifyDeadEnds();
-        int n = random.nextInt(a.size());
-        int n2 = random.nextInt(a.size());
+        int n = random.nextInt(OpenCells.size());
+        int n2 = random.nextInt(OpenCells.size());
         /* 
         while(true){
             if (n!=n2){
