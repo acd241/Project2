@@ -4,6 +4,7 @@ import java.util.Random;
 public class Mouse {
     private Pair pos;
     Shiptest s;
+    Random random = new Random();
 
     public Mouse(Shiptest t){
         this.s = t;
@@ -11,12 +12,12 @@ public class Mouse {
     }
 
     public void StartingMousePosition(){
-        Random random = new Random();
         while(true){
             int x = random.nextInt(s.OpenCells.size());
             Pair temp = s.OpenCells.get(x);
-            if(s.isBot(temp.getKey(),temp.getValue())){
+            if(!s.isBot(temp.getKey(),temp.getValue())){
                 this.pos = temp;
+                s.grid[temp.getKey()][temp.getValue()].SetState(5);
                 s.grid[temp.getKey()][temp.getValue()].setMouse(true);
                 break;
             }

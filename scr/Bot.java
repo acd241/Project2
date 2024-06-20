@@ -3,6 +3,7 @@ import java.util.*;
 public class Bot {
     private Pair pos;
     private Shiptest s;
+    Random random = new Random();
 
     
     
@@ -12,7 +13,6 @@ public class Bot {
     }
 
     public void StartingBotPosition(){
-        Random random = new Random();
         int x = random.nextInt(s.OpenCells.size());
         Pair temp = s.OpenCells.get(x);
         if(s.isOpen(temp.getKey(),temp.getValue()) || s.isDeadEnd(temp.getKey(),temp.getValue())){
