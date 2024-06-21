@@ -14,7 +14,11 @@ public class Shiptest {
     private static final int Bot = 3;
     private static final int DeadEnd = 2;
 
-    public Cell[][] grid;  
+
+    public Cell[][] grid;
+    public int [][] adjecencyGrid;
+    public ArrayList<Integer> AdjListPar = new ArrayList<Integer>();
+    public ArrayList<LL> AdjList = new ArrayList<LL>();
     public Pair BotPosition;
     public Pair ButtonPostion;
     public Pair StartingMousePos;
@@ -28,6 +32,7 @@ public class Shiptest {
 
     public Shiptest(){
         grid = new Cell[40][40];
+        adjecencyGrid = new int [40][40];
         int x = random.nextInt(40);
         int y = random.nextInt(40);
         PopulateShip(grid);
@@ -37,6 +42,13 @@ public class Shiptest {
         AddExtraOpenCells();
         OpenCells = LabelAllOpenCells();
         IdentifyDeadEnds();
+        AdjGrid();
+        AdjParList();
+        ArrayList<LL> temp = AdjList1();
+        AdjList = AdjList2(temp);
+        visited = new boolean [AdjList.size()];
+        edgeTo = new int [AdjList.size()];
+
         int n = random.nextInt(OpenCells.size());
         int n2 = random.nextInt(OpenCells.size());
         /* 
@@ -77,10 +89,22 @@ public class Shiptest {
         return this.edgeTo;
     }
 
-    public void InitilizeEdge(){
-        for(int i = 0; i<edgeTo.length; i++){
-            edgeTo[i] = -5;
+    public void DeInitilizeEdge(int [] edge){
+        int l = edge.length;
+        for(int i = 0; i<edge.length; i++){
+            edge[i] = 0;
         }
+        edge = null;
+        edge = new int[l];
+    }
+
+    public void DeInitilizevisit(boolean [] visit){
+        int l = visit.length;
+        for(int i = 0; i<visit.length; i++){
+            visit[i] = false;
+        }
+        visit = null;
+        visit = new boolean [l];
     }
     public void PrintPath(ArrayList<Integer> a){
         for(int i = 0; i<a.size(); i++){
@@ -101,6 +125,93 @@ public class Shiptest {
         System.out.println();
     }
 
+    public void AdjGrid(){
+        int x = 0;
+        for(int i = 0; i <grid.length; i++){
+            for(int j = 0; j<grid[i].length; j++){
+                if(isOpen(i,j) == true || isDeadEnd(i,j) == true || isBot(i,j) == true || isMouse(i,j) == true){
+                    adjecencyGrid[i][j] = x;
+                    x+=1;
+                }
+                else{
+                    adjecencyGrid[i][j] = -2;
+                }
+            }
+        }
+    }
+
+    public void AdjParList(){
+        for(int i = 0; i <adjecencyGrid.length; i++){
+            for(int j = 0; j<adjecencyGrid[i].length; j++){
+                if(isOpen(i,j) == true || isDeadEnd(i,j) == true || isBot(i,j) == true || isMouse(i,j) == true){
+                    AdjListPar.add(adjecencyGrid[i][j]);
+                }
+                else{
+                    
+                }
+            }
+        }
+    }
+
+    public ArrayList<LL> AdjList1(){
+        ArrayList<LL> a = new ArrayList<LL>();
+        for(int i = 0; i <adjecencyGrid.length; i++){
+            for(int j = 0; j<adjecencyGrid[i].length; j++){
+                if(isOpen(i,j) == true || isDeadEnd(i,j) == true ||  isBot(i,j) == true || isMouse(i,j) == true){
+                    LL l = new LL();
+                    l.addToBack(adjecencyGrid[i][j]);
+                    a.add(l);
+                }
+            }
+        }
+
+        return a;
+    }
+
+    public ArrayList<LL> AdjList2(ArrayList<LL> a){
+        for(int i = 0; i <adjecencyGrid.length; i++){
+            for(int j = 0; j<adjecencyGrid[i].length; j++){
+                if(isOpen(i,j) == true || isDeadEnd(i,j) == true  || isBot(i,j) == true || isMouse(i,j) == true){
+                    LL as = OpenNeighbors(i,j);
+                    int idx = AdjListPar.indexOf(adjecencyGrid[i][j]);
+                    for(IntNode ptr = as.front; ptr != null; ptr = ptr.getNextIntNode()){
+                        a.get(idx).addToBack(ptr.getInt());
+                    }
+
+                }
+            }
+        }
+        return a;
+    }
+
+    public LL OpenNeighbors(int row, int col){
+        LL a = new LL();
+        if(InBounds(row-1, col) == true){
+            if(isOpen(row-1, col) == true || isBot(row-1, col) == true || isMouse(row-1, col) == true || isDeadEnd(row-1, col) == true ){
+                int x = adjecencyGrid[row-1][col];
+                a.addToBack(x);
+            }
+        }
+        if(InBounds(row, col+1) == true){
+            if(isOpen(row, col+1)|| isBot(row, col+1) == true || isMouse(row, col+1) == true || isDeadEnd(row, col+1) == true){
+                int x = adjecencyGrid[row][col+1];
+                a.addToBack(x);
+            }
+        }
+        if(InBounds(row+1, col) == true){
+            if(isOpen(row+1, col) || isBot(row+1, col) == true || isMouse(row+1, col) == true || isDeadEnd(row+1, col) == true ){
+                int x = adjecencyGrid[row+1][col];
+                a.addToBack(x);
+            }
+        }
+        if(InBounds(row, col-1) == true){
+            if(isOpen(row, col-1) || isBot(row, col-1) == true || isMouse(row, col-1) == true || isDeadEnd(row, col-1) == true ){
+                int x = adjecencyGrid[row][col-1];
+                a.addToBack(x);
+            }
+        }
+        return a;
+    }
 
 
     public boolean isOpen(int row, int col){
@@ -204,7 +315,7 @@ public class Shiptest {
     public boolean PotentialNextStep(int row, int col){
         if(0<=row && row <grid.length){
             if(0<=col && col<grid.length){
-                if(isOpen(row,col) == true|| isDeadEnd(row, col)){
+                if(isOpen(row,col) == true|| isDeadEnd(row, col)|| isBot(row, col)){
                     return true;
                 }
                 return false;
@@ -213,6 +324,7 @@ public class Shiptest {
         }
         return false;
     }
+    
     public int numOfClosedNeighbors(int row, int col){
         int count = 0;
         if(InBounds(row+1, col) == true){

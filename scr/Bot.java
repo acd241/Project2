@@ -40,18 +40,49 @@ public class Bot {
     public void UpdateProbabilities(boolean beep, double alpha){
         for(int i = 0; i<s.grid.length; i++){
             for(int j = 0; j<s.grid.length; j++){
+                if(s.isClosed(i,j)){
+                    s.grid[i][j].setProbOfMouse(0.0);
+                    continue;
+                }
+                if(beep){
+                    int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
+                    if(d == 1){
+                        s.grid[i][j].setProbOfMouse(1);
+                    }
+                    else{
+                        double x = ((-alpha)*(d-1));
+                        double prob = Math.exp(x);
+                        s.grid[i][j].setProbOfMouse(s.grid[i][j].getProbOfMouse()*prob);
+                    }
+                }
                 int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
                 double x = ((-alpha)*(d-1));
                 if(beep){
-                    double prob = Math.exp(x);
+                    double prob = 1-Math.exp(x);
                     s.grid[i][j].setProbOfMouse(prob);
                 }
                 else if(!beep){
-                    double prob = 1- Math.exp(x);
+                    double prob = Math.exp(x);
                     s.grid[i][j].setProbOfMouse(prob);
                 }
             }
         }
+    }
+
+    public Pair FindHighestProbCell(){
+        double max = 0;
+        Pair p = new Pair(-1,-1);
+        for(int i = 0; i <s.grid.length; i++){
+            for(int j = 0; j<s.grid[i].length; j++){
+                if(s.isOpen(i,j) == true || s.isDeadEnd(i,j) == true || s.isBot(i,j) == true || s.isMouse(i,j) == true){
+                    if(s.grid[i][j].getProbOfMouse() > max){
+                        max = s.grid[i][j].getProbOfMouse();
+                        p = new Pair(i, j);
+                    }
+                }
+            }
+        }
+        return p;
     }
 
     public ArrayList<Pair> PotentialNextMove(int row, int col){
@@ -105,8 +136,64 @@ public class Bot {
         this.pos = p;
         s.BotPosition = p;
         s.grid[p.getKey()][p.getValue()].setBot(true);
-        s.grid[p.getKey()][p.getValue()].SetState(5);
+        s.grid[p.getKey()][p.getValue()].SetState(3);
     }
+
+    public ArrayList<Integer> ComputePath(int[] edge, int Start, int Finish){
+        ArrayList<Integer> a = new ArrayList<Integer>();
+        Stack<Integer> s = new Stack<Integer>();
+        boolean reachedButton = false;
+        int x = Finish;
+        while(reachedButton != true){
+            if(Start == x){
+                reachedButton = true;
+            }
+            else{
+                s.push(x);
+                x = edge[x];
+            }
+        }
+        while(!s.isEmpty()){
+            a.add(s.pop());
+        }
+        return a;
+    }
+
+    public Pair GridLocationOfPath(int n){
+        Pair p = new Pair();
+        for(int i = 0; i <s.adjecencyGrid.length; i++){
+            for(int j = 0; j<s.adjecencyGrid[i].length; j++){
+                if(s.adjecencyGrid[i][j] == n){
+                    p.setKey(i);
+                    p.setValue(j);
+                }
+            }
+        }
+        return p;
+    }
+
+    public static void bfs(int startValue, ArrayList<LL> adj, ArrayList<Integer> adjPar, boolean [] vis, int [] edgeTo){
+        Queue q = new Queue();
+        q.enqueue(startValue);
+        vis[startValue] = true;
+        while(!q.isEmpty()){
+            int v = q.dequeue();
+            int index = adjPar.indexOf(v);
+            LL ll = adj.get(index);
+            for(IntNode ptr = ll.front; ptr != null; ptr = ptr.getNextIntNode()){
+                int i = adjPar.indexOf(ptr.getInt());
+                if(!vis[i]){
+                    q.enqueue(ptr.getInt());
+                    vis[i] = true;
+                    edgeTo[i] = v;
+                }
+            }
+
+        }
+            
+    }
+
+
 
     public Shiptest GetShip(){
         return this.s;

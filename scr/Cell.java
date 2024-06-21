@@ -58,7 +58,7 @@ public class Cell {
     }
 
     public void setMouse(boolean b){
-        this.bot = b;
+        this.mouse = b;
     }
 
     public double getProbOfMouse(){
