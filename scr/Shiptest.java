@@ -20,11 +20,10 @@ public class Shiptest {
     public ArrayList<Integer> AdjListPar = new ArrayList<Integer>();
     public ArrayList<LL> AdjList = new ArrayList<LL>();
     public Pair BotPosition;
-    public Pair ButtonPostion;
     public Pair StartingMousePos;
     public int [] edgeTo;
     public boolean [] visited;
-    public int totalOpenCells;
+    public int totalOpenCells = 1;
     public boolean IsBot = false;
     public ArrayList<Pair> OpenCells;
 
@@ -46,6 +45,7 @@ public class Shiptest {
         AdjParList();
         ArrayList<LL> temp = AdjList1();
         AdjList = AdjList2(temp);
+        StartingProbabilities();
         visited = new boolean [AdjList.size()];
         edgeTo = new int [AdjList.size()];
 
@@ -67,6 +67,96 @@ public class Shiptest {
         grid[BotPosition.getKey()][BotPosition.getValue()].SetState(Bot);
         grid[StartingMousePos.getKey()][StartingMousePos.getValue()].SetState(Mouse);
         */
+    }
+
+    public Shiptest(int Mice){
+        grid = new Cell[40][40];
+        adjecencyGrid = new int [40][40];
+        int x = random.nextInt(40);
+        int y = random.nextInt(40);
+        PopulateShip(grid);
+        grid[x][y].SetState(Open);
+        ExploreShip();
+        IdentifyDeadEnds();
+        AddExtraOpenCells();
+        OpenCells = LabelAllOpenCells();
+        IdentifyDeadEnds();
+        AdjGrid();
+        AdjParList();
+        ArrayList<LL> temp = AdjList1();
+        AdjList = AdjList2(temp);
+        StartingProbabilities(Mice);
+        visited = new boolean [AdjList.size()];
+        edgeTo = new int [AdjList.size()];
+
+        int n = random.nextInt(OpenCells.size());
+        int n2 = random.nextInt(OpenCells.size());
+        /* 
+        while(true){
+            if (n!=n2){
+                break;
+            }
+            else{
+                n = random.nextInt(a.size());
+                n2 = random.nextInt(a.size());
+            }
+        }
+        
+        BotPosition = a.get(n);
+        StartingMousePos = a.get(n2);
+        grid[BotPosition.getKey()][BotPosition.getValue()].SetState(Bot);
+        grid[StartingMousePos.getKey()][StartingMousePos.getValue()].SetState(Mouse);
+        */
+    }
+
+    public Shiptest(int size, int mice){
+        grid = new Cell[5][5];
+        adjecencyGrid = new int [5][5];
+        int x = random.nextInt(5);
+        int y = random.nextInt(5);
+        PopulateShip(grid);
+        grid[x][y].SetState(Open);
+        ExploreShip();
+        IdentifyDeadEnds();
+        AddExtraOpenCells();
+        OpenCells = LabelAllOpenCells();
+        IdentifyDeadEnds();
+        AdjGrid();
+        AdjParList();
+        ArrayList<LL> temp = AdjList1();
+        AdjList = AdjList2(temp);
+        StartingProbabilities(mice);
+        visited = new boolean [AdjList.size()];
+        edgeTo = new int [AdjList.size()];
+    }
+    
+
+    public void StartingProbabilities(){
+        for(int i = 0; i<grid.length; i++){
+            for (int j = 0; j<grid[i].length; j++){
+                if(isOpen(i,j)|| isDeadEnd(i, j) || isMouse(i, j)){
+                    double d = 1.0/totalOpenCells;
+                    grid[i][j].setProbOfMouse(d);
+                }
+                else{
+                    grid[i][j].setProbOfMouse(0.000);
+                }
+            }
+        }
+    }
+
+    public void StartingProbabilities(int numOfMice){
+        for(int i = 0; i<grid.length; i++){
+            for (int j = 0; j<grid[i].length; j++){
+                if(isOpen(i,j)|| isDeadEnd(i, j) || isMouse(i, j)){
+                    double d = (1.0*numOfMice)/totalOpenCells;
+                    grid[i][j].setProbOfMouse(d);
+                }
+                else{
+                    grid[i][j].setProbOfMouse(0.000);
+                }
+            }
+        }
     }
 
     public void PopulateShip(Cell [][] g){

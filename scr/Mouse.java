@@ -51,31 +51,7 @@ public class Mouse {
         
     }
 
-    public void UpdateProbabilities(boolean beep, double alpha){
-        for(int i = 0; i<s.grid.length; i++){
-            for(int j = 0; j<s.grid.length; j++){
-                if(s.isClosed(i,j)){
-                    s.grid[i][j].setProbOfMouse(0.0);
-                    continue;
-                }
-                int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
-                if(d == 1){
-                    s.grid[i][j].setProbOfMouse(1.0);
-                }
-                else{
-                    double x = (-alpha*(d-1));
-                    double prob = Math.exp(x);
-                    s.grid[i][j].setProbOfMouse(prob);
-                    /* 
-                    else if(!beep){
-                        double prob = 1- Math.exp(x);
-                        s.grid[i][j].setProbOfMouse(prob);
-                    }
-                        */
-                }
-            }
-        }
-    }
+    
 
     public void MoveMouse(Pair p){
         s.grid[pos.getKey()][pos.getValue()].SetState(1);

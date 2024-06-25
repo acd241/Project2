@@ -35,4 +35,13 @@ public class Pair {
             return false;
         }
     }
+
+    public boolean isSame(int i, int j){
+        if(i == this.getKey() && j == this.getValue()){
+            return true; 
+        }
+        else{
+            return false;
+        }
+    }
 }

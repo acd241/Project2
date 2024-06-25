@@ -3,6 +3,7 @@ import java.util.*;
 public class Bot {
     private Pair pos;
     private Shiptest s;
+    private HashSet<String> CellsTraversed = new HashSet<String>();
     Random random = new Random();
 
     
@@ -18,6 +19,8 @@ public class Bot {
         if(s.isOpen(temp.getKey(),temp.getValue()) || s.isDeadEnd(temp.getKey(),temp.getValue())){
             this.pos = temp;
             s.BotPosition = temp;
+            String coord = temp.getKey() + "," + temp.getValue();
+            CellsTraversed.add(coord);
             s.grid[temp.getKey()][temp.getValue()].SetState(3);
             s.grid[temp.getKey()][temp.getValue()].setBot(true);
         }
@@ -37,7 +40,78 @@ public class Bot {
         }
     }
 
-    public void UpdateProbabilities(boolean beep, double alpha){
+    public double ProbOfBeep(boolean beep, double alpha, Pair mousePos){
+        int d = Math.abs(pos.getKey() - mousePos.getKey()) + Math.abs(pos.getValue() - mousePos.getValue());
+        double x = ((-alpha)*(d-1));
+        if(beep){
+            return Math.exp(x);
+        }
+        else{
+            return 1-Math.exp(x);
+        }
+    }
+
+
+    public void UpdateProbabilitiesStationary(boolean beep, double alpha, int numOfMice, HashSet<String> CellsChecked){
+        double ProbTotal = 0.00;
+        for(int i = 0; i<s.grid.length; i++){
+            for(int j = 0; j<s.grid.length; j++){
+                if(s.isClosed(i,j)){
+                    s.grid[i][j].setProbOfMouse(0.0);
+                    continue;
+                }
+                if(beep){
+                    String coord = i + "," + j;
+                    if(CellsChecked.contains(coord)){
+                        s.grid[i][j].setProbOfMouse(0.0);
+                        continue;
+                    }
+                    int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
+                    if(d == 0){
+                        s.grid[i][j].setProbOfMouse(0.0);
+                        continue;
+                    }
+                    double x = ((-alpha)*(d-1));
+                    double probGivenMouseInCell = Math.exp(x);
+                    double MouseInCell = (numOfMice*1.0)/(s.totalOpenCells - CellsChecked.size());
+                    double NewMouseProbOfCell = (probGivenMouseInCell * MouseInCell);
+                    ProbTotal+=NewMouseProbOfCell;
+                    s.grid[i][j].setProbOfMouse(NewMouseProbOfCell);
+                    
+                }
+                else{
+                    String coord = i + "," + j;
+                    if(CellsChecked.contains(coord)){
+                        s.grid[i][j].setProbOfMouse(0.0);
+                        continue;
+                    }
+                    int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
+                    if(d == 0){
+                        s.grid[i][j].setProbOfMouse(0.0);
+                        continue;
+                    }
+                    double x = ((-alpha)*(d-1));
+                    double probGivenMouseInCell = 1-Math.exp(x);
+                    double MouseInCell = (numOfMice*1.0)/(s.totalOpenCells - CellsChecked.size());
+                    double NewMouseProbOfCell = (probGivenMouseInCell * MouseInCell);
+                    ProbTotal +=NewMouseProbOfCell;
+                    s.grid[i][j].setProbOfMouse(NewMouseProbOfCell);
+                }
+            }
+        }
+        for(int i = 0; i<s.grid.length; i++){
+            for(int j = 0; j<s.grid.length; j++){
+                double OldProb = s.grid[i][j].getProbOfMouse();
+                double FinalProb = OldProb/ProbTotal;
+                s.grid[i][j].setProbOfMouse(FinalProb);
+            }
+        }
+    }
+
+
+
+    public void UpdateProbabilitiesMoving(boolean beep, double alpha, int numOfMice){
+        double ProbTotal = 0.00;
         for(int i = 0; i<s.grid.length; i++){
             for(int j = 0; j<s.grid.length; j++){
                 if(s.isClosed(i,j)){
@@ -46,35 +120,81 @@ public class Bot {
                 }
                 if(beep){
                     int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
-                    if(d == 1){
-                        s.grid[i][j].setProbOfMouse(1);
+                    if(d == 0){
+                        s.grid[i][j].setProbOfMouse(0.0);
+                        continue;
                     }
-                    else{
-                        double x = ((-alpha)*(d-1));
-                        double prob = Math.exp(x);
-                        s.grid[i][j].setProbOfMouse(s.grid[i][j].getProbOfMouse()*prob);
+                    double x = ((-alpha)*(d-1));
+                    double probGivenMouseInCell = Math.exp(x);
+                    double MouseInCell = s.grid[i][j].getProbOfMouse();
+                    double NewProb = (probGivenMouseInCell * MouseInCell);
+                    ProbTotal += NewProb;
+                    /* 
+                    double TotalProbOfBeep = (probGivenMouseInCell * MouseInCell)+ (probGivenMouseInCell*(1-MouseInCell));
+                    double NewMouseProbOfCell = (probGivenMouseInCell * MouseInCell)/TotalProbOfBeep;
+                    */
+                    s.grid[i][j].setProbOfMouse(NewProb);
+                }
+                else{
+                    int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
+                    if(d == 0){
+                        s.grid[i][j].setProbOfMouse(0.00);
+                        continue;
                     }
+                    double x = ((-alpha)*(d-1));
+                    double probGivenMouseInCell = 1-Math.exp(x);
+                    double MouseInCell = s.grid[i][j].getProbOfMouse();
+                    double NewProb = (probGivenMouseInCell * MouseInCell);
+                    ProbTotal+=NewProb;
+                    /* 
+                    double TotalProbOfNoBeep = (probGivenMouseInCell * MouseInCell) + (1.0 * (1-MouseInCell));
+                    double NewMouseProbOfCell = (probGivenMouseInCell * MouseInCell)/TotalProbOfNoBeep;
+                    */
+                    s.grid[i][j].setProbOfMouse(NewProb);
                 }
-                int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
-                double x = ((-alpha)*(d-1));
-                if(beep){
-                    double prob = 1-Math.exp(x);
-                    s.grid[i][j].setProbOfMouse(prob);
-                }
-                else if(!beep){
-                    double prob = Math.exp(x);
-                    s.grid[i][j].setProbOfMouse(prob);
-                }
+            }
+        }
+        for(int i = 0; i<s.grid.length; i++){
+            for(int j = 0; j<s.grid.length; j++){
+                double OldProb = s.grid[i][j].getProbOfMouse();
+                double FinalProb = OldProb/ProbTotal;
+                s.grid[i][j].setProbOfMouse(FinalProb);
             }
         }
     }
 
+    public Pair FindStartingCell(){
+        Pair p = new Pair(-1,-1);
+        for(int i = 19; i <=21; i++){
+            for(int j = 17; j<23; j++){
+                if(s.isOpen(i,j) == true || s.isDeadEnd(i,j) == true){
+                    p = new Pair(i,j);
+                    return p;
+                }
+            }
+        }
+        return p;
+    }
+
+    public Pair FindStartingCellTest(){
+        Pair p = new Pair(-1,-1);
+        for(int i = 2; i <3; i++){
+            for(int j = 1; j<4; j++){
+                if(s.isOpen(i,j) == true || s.isDeadEnd(i,j) == true){
+                    p = new Pair(i,j);
+                    return p;
+                }
+            }
+        }
+        return p;
+    }
+
     public Pair FindHighestProbCell(){
-        double max = 0;
+        double max = 0.0;
         Pair p = new Pair(-1,-1);
         for(int i = 0; i <s.grid.length; i++){
             for(int j = 0; j<s.grid[i].length; j++){
-                if(s.isOpen(i,j) == true || s.isDeadEnd(i,j) == true || s.isBot(i,j) == true || s.isMouse(i,j) == true){
+                if(s.isOpen(i,j) == true || s.isDeadEnd(i,j) == true || s.isBot(i,j) || s.isMouse(i,j) == true){
                     if(s.grid[i][j].getProbOfMouse() > max){
                         max = s.grid[i][j].getProbOfMouse();
                         p = new Pair(i, j);
@@ -133,6 +253,20 @@ public class Bot {
     public void MoveBot(Pair p){
         s.grid[pos.getKey()][pos.getValue()].SetState(1);
         s.grid[pos.getKey()][pos.getValue()].setBot(false);
+        String coord = pos.getKey() + "," + pos.getValue();
+        CellsTraversed.add(coord);
+        this.pos = p;
+        s.BotPosition = p;
+        s.grid[p.getKey()][p.getValue()].setBot(true);
+        s.grid[p.getKey()][p.getValue()].SetState(3);
+    }
+
+    public void MoveBotStationary(Pair p){
+        s.grid[pos.getKey()][pos.getValue()].SetState(1);
+        s.grid[pos.getKey()][pos.getValue()].setBot(false);
+        s.grid[pos.getKey()][pos.getValue()].setProbOfMouse(0.00);
+        String coord = p.getKey() + "," + p.getValue();
+        CellsTraversed.add(coord);
         this.pos = p;
         s.BotPosition = p;
         s.grid[p.getKey()][p.getValue()].setBot(true);
@@ -211,6 +345,12 @@ public class Bot {
         this.pos = p;
     }
 
+    public HashSet<String> GetCellsTraversed(){
+        return this.CellsTraversed;
+    }
 
+    public void SetCellsTraversed(HashSet<String> p){
+        this.CellsTraversed = p;
+    }
 
 }
