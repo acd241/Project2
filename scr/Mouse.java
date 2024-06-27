@@ -11,19 +11,28 @@ public class Mouse {
         StartingMousePosition();
     }
 
-    public void StartingMousePosition(){
+
+    public Pair StartingMousePosition(){
         while(true){
             int x = random.nextInt(s.OpenCells.size());
             Pair temp = s.OpenCells.get(x);
-            if(!s.isBot(temp.getKey(),temp.getValue())){
+            if(!s.isBot(temp.getKey(),temp.getValue()) && !s.isMouse(temp.getKey(), temp.getValue())){
                 this.pos = temp;
-                s.StartingMousePos = temp;
+                if(s.StartingMousePos != null){
+                    s.SecondMousePos = temp;
+                }
+                else{
+                    s.StartingMousePos = temp;
+                }
                 s.grid[temp.getKey()][temp.getValue()].SetState(5);
                 s.grid[temp.getKey()][temp.getValue()].setMouse(true);
-                break;
+                return temp;
             }
         }
     }
+
+
+
 
     public Pair PickRandomNeighbor(int row, int col){
         ArrayList<Pair> a = new ArrayList<Pair>();
@@ -53,11 +62,20 @@ public class Mouse {
 
     
 
-    public void MoveMouse(Pair p){
+    public void MoveMouse1(Pair p){
         s.grid[pos.getKey()][pos.getValue()].SetState(1);
         s.grid[pos.getKey()][pos.getValue()].setMouse(false);
         this.pos = p;
         s.StartingMousePos= p;
+        s.grid[p.getKey()][p.getValue()].setMouse(true);
+        s.grid[pos.getKey()][pos.getValue()].SetState(5);
+    }
+
+    public void MoveMouse2(Pair p){
+        s.grid[pos.getKey()][pos.getValue()].SetState(1);
+        s.grid[pos.getKey()][pos.getValue()].setMouse(false);
+        this.pos = p;
+        s.SecondMousePos= p;
         s.grid[p.getKey()][p.getValue()].setMouse(true);
         s.grid[pos.getKey()][pos.getValue()].SetState(5);
     }

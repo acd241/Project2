@@ -21,6 +21,7 @@ public class Shiptest {
     public ArrayList<LL> AdjList = new ArrayList<LL>();
     public Pair BotPosition;
     public Pair StartingMousePos;
+    public Pair SecondMousePos;
     public int [] edgeTo;
     public boolean [] visited;
     public int totalOpenCells = 1;

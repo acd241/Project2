@@ -40,6 +40,29 @@ public class Bot {
         }
     }
 
+    public boolean Sense(double alpha, Pair mousePos, Pair SecondPos){
+        if(s.isNextTo(pos)){
+            return true;
+        }
+        int d = Math.abs(pos.getKey() - mousePos.getKey()) + Math.abs(pos.getValue() - mousePos.getValue());
+        double x = ((-alpha)*(d-1));
+        int d1 = Math.abs(pos.getKey() - SecondPos.getKey()) + Math.abs(pos.getValue() - SecondPos.getValue());
+        double x1 = ((-alpha)*(d-1));
+        double prob = 0.0;
+        if(Math.exp(x) > Math.exp(x1)){
+            prob = Math.exp(x);
+        }
+        else{
+            prob = Math.exp(x1);
+        }
+        if(Math.random() < prob){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public double ProbOfBeep(boolean beep, double alpha, Pair mousePos){
         int d = Math.abs(pos.getKey() - mousePos.getKey()) + Math.abs(pos.getValue() - mousePos.getValue());
         double x = ((-alpha)*(d-1));
@@ -49,6 +72,7 @@ public class Bot {
         else{
             return 1-Math.exp(x);
         }
+
     }
 
 
