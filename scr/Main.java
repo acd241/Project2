@@ -166,7 +166,7 @@ public class Main {
                         return new Pair(sense, count);
                     }
                     else{
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                     }
                 }
                 if(Break){

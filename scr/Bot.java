@@ -216,6 +216,7 @@ public class Bot {
     public Pair FindHighestProbCell(){
         double max = 0.0;
         Pair p = new Pair(-1,-1);
+        HashSet<String> ClosestTie = new HashSet<String>();
         for(int i = 0; i <s.grid.length; i++){
             for(int j = 0; j<s.grid[i].length; j++){
                 if(s.isOpen(i,j) == true || s.isDeadEnd(i,j) == true || s.isBot(i,j) || s.isMouse(i,j) == true){
@@ -226,7 +227,22 @@ public class Bot {
                 }
             }
         }
+        //return p;
+        int least = 1000;
+        for(int i = 0; i <s.grid.length; i++){
+            for(int j = 0; j<s.grid[i].length; j++){
+                if(s.grid[i][j].getProbOfMouse() == max){
+                    int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
+                    if(d<least){
+                        least = d;
+                        p = new Pair(i,j);
+                    }
+                }
+            }
+        }
+        
         return p;
+        
     }
 
     public ArrayList<Pair> PotentialNextMove(int row, int col){

@@ -40,44 +40,54 @@ public class MultipleMiceTest {
             }
         }
         if(!alreadyFoundMouse){
-            int sense = 0;
-            int movement;
-            sense +=1;
-            hasBeeped = b.Sense(0.5, t.StartingMousePos);
-            b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 1, b.GetCellsTraversed());
-            //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
-            t.DeInitilizeEdge(t.edgeTo);
-            t.DeInitilizevisit(t.visited);
-            Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
-            MousePredict = null;
-            MousePredict = b.FindHighestProbCell();
-            Path = null;
-            Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
-            for(int j = 0; j<1000; j++){
-                //t.PrintShip(t.grid);
-                if(j%2 == 0){
-                    count+=1;
-
-                    Pair next = b.GridLocationOfPath(Path.get(0));
-                    b.MoveBotStationary(next);
-                    if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                        
-                        System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
-                        System.out.println();
-                        t.PrintShip(t.grid);
-                        Break = true;
-                        return new Pair(sense, count);
+            for(int i = 0; i<1000; i++){
+                int sense = 0;
+                sense +=1;
+                hasBeeped = b.Sense(0.5, t.StartingMousePos);
+                b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 1, b.GetCellsTraversed());
+                //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
+                t.DeInitilizeEdge(t.edgeTo);
+                t.DeInitilizevisit(t.visited);
+                Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
+                MousePredict = null;
+                MousePredict = b.FindHighestProbCell();
+                Path = null;
+                Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
+                boolean PathCompleted = false;
+                int movement = 0;
+                int j = 0;
+                while(!PathCompleted){
+                    if(j%2 == 0){
+                        count+=1;
+                        if(movement >= Path.size()){
+                            PathCompleted = true;
+                            break;
+                        }
+                        Pair next = b.GridLocationOfPath(Path.get(movement));
+                        b.MoveBotStationary(next);
+                        movement +=1;
+                        if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
+                            
+                            System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                            System.out.println();
+                            t.PrintShip(t.grid);
+                            Break = true;
+                            alreadyFoundMouse = true;
+                            return new Pair(sense, count);
+                        }
+                        else{
+                            t.PrintShip(t.grid);
+                        }
                     }
-                    else{
-                        t.PrintShip(t.grid);
-                    }
-                }
-                else if(j%2 == 1){
-                    sense +=1;
-                    hasBeeped = b.Sense(0.5, t.StartingMousePos);
-                    b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 1, b.GetCellsTraversed());
-                    //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
                     
+                    else if(j%2 == 1){
+                        sense +=1;
+                        hasBeeped = b.Sense(0.5, t.StartingMousePos);
+                        b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 1, b.GetCellsTraversed());
+                        //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
+                        
+                    }
+                    j+=1;
                 }
             }
         }
