@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 public class Main {
 
@@ -5,7 +6,8 @@ public class Main {
         Shiptest t = new Shiptest();
         Bot b = new Bot(t);
         Mouse m1 = new Mouse(t);
-        t.PrintShip(t.grid);
+        t.StartingProbabilities();
+        //t.PrintShip(t.grid);
         boolean hasBeeped = false;
         int count = 0;
         boolean Break = false;
@@ -40,7 +42,7 @@ public class Main {
         }
         if(!alreadyFoundMouse){
             for(int j = 0; j<1000; j++){
-                t.PrintShip(t.grid);
+                //t.PrintShip(t.grid);
                 hasBeeped = b.Sense(0.5, m1.GetMousePos());
                 //b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 1, b.GetCellsTraversed());
                 b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
@@ -63,7 +65,7 @@ public class Main {
                         int sense = j +1;
                         System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
                         System.out.println();
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         Break = true;
                         return new Pair(sense, count);
                     }
@@ -73,7 +75,7 @@ public class Main {
                         int sense = j +1;
                         System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
                         System.out.println();
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         Break = true;
                         return new Pair(sense, count);
                     }
@@ -93,7 +95,14 @@ public class Main {
         Shiptest t = new Shiptest();
         Bot b = new Bot(t);
         Mouse m1 = new Mouse(t);
-        t.PrintShip(t.grid);
+        t.StartingProbabilities();
+        try{
+            t.PrintShip(t.grid);
+        }
+        catch(IOException e){
+            System.out.print("exception: "+ e);
+        }
+
         boolean hasBeeped = false;
         int count = 0;
         boolean Break = false;
@@ -123,12 +132,17 @@ public class Main {
                 return new Pair(0,count);
             }
             else{
-                t.PrintShip(t.grid);
+                try{
+                    t.PrintShip(t.grid);
+                }
+                catch(IOException e){
+                    System.out.print("exception: "+ e);
+                }
             }
         }
         if(!alreadyFoundMouse){
             for(int j = 0; j<1000; j++){
-                t.PrintShip(t.grid);
+                //t.PrintShip(t.grid);
                 hasBeeped = b.Sense(0.5, t.StartingMousePos);
                 b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 1, b.GetCellsTraversed());
                 //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
@@ -151,7 +165,12 @@ public class Main {
                         int sense = j +1;
                         System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
                         System.out.println();
-                        t.PrintShip(t.grid);
+                        try{
+                            t.PrintShip(t.grid);
+                        }
+                        catch(IOException e){
+                            System.out.print("exception: "+ e);
+                        }
                         Break = true;
                         return new Pair(sense, count);
                     }
@@ -161,12 +180,22 @@ public class Main {
                         int sense = j +1;
                         System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
                         System.out.println();
-                        t.PrintShip(t.grid);
+                        try{
+                            t.PrintShip(t.grid);
+                        }
+                        catch(IOException e){
+                            System.out.print("exception: "+ e);
+                        }
                         Break = true;
                         return new Pair(sense, count);
                     }
                     else{
-                        //t.PrintShip(t.grid);
+                        try{
+                            t.PrintShip(t.grid);
+                        }
+                        catch(IOException e){
+                            System.out.print("exception: "+ e);
+                        }
                     }
                 }
                 if(Break){
@@ -182,7 +211,7 @@ public class Main {
         Bot b = new Bot(t);
         Mouse m1 = new Mouse(t);
         Mouse m2 = new Mouse(t);
-        t.PrintShip(t.grid);
+        //t.PrintShip(t.grid);
         boolean hasBeeped = false;
         int count = 0;
         Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
@@ -285,7 +314,7 @@ public class Main {
             }
                 */
             else{
-                t.PrintShip(t.grid);
+                //t.PrintShip(t.grid);
             }
         }
         int sense = 0;
@@ -408,7 +437,7 @@ public class Main {
                     }
                         */
                     else{
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                     }
                 }
                 if(Break){
@@ -426,7 +455,7 @@ public class Main {
         Bot b = new Bot(t);
         Mouse m1 = new Mouse(t);
         Mouse m2 = new Mouse(t);
-        t.PrintShip(t.grid);
+        //t.PrintShip(t.grid);
         boolean hasBeeped = false;
         int count = 0;
         Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
@@ -453,7 +482,7 @@ public class Main {
                         //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                         FoundMouse1 =true;
                         MouseFound +=1;
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         continue;
                     }
                     else if(b.GetBotPos().isSame(m2.GetMousePos())){
@@ -463,7 +492,7 @@ public class Main {
                         //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                         FoundMouse2 =true;
                         MouseFound +=1;
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         continue;
                     }
                 }
@@ -475,7 +504,7 @@ public class Main {
                         //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                         FoundMouse1 =true;
                         MouseFound +=1;
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         return new Pair(0, count);
                     }
                     else if(FoundMouse2){
@@ -485,7 +514,7 @@ public class Main {
                         //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                         FoundMouse1 =true;
                         MouseFound +=1;
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         return new Pair(0, count);
                     }
                     break;
@@ -511,7 +540,7 @@ public class Main {
                         //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                         FoundMouse1 =true;
                         MouseFound +=1;
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         continue;
                     }
                     else if(b.GetBotPos().isSame(m2.GetMousePos())){
@@ -521,7 +550,7 @@ public class Main {
                         //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                         FoundMouse2 =true;
                         MouseFound +=1;
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         continue;
                     }
                 }
@@ -533,7 +562,7 @@ public class Main {
                         //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                         FoundMouse1 =true;
                         MouseFound +=1;
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         return new Pair(0, count);
                     }
                     else if(FoundMouse1){
@@ -543,7 +572,7 @@ public class Main {
                         //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                         FoundMouse2 =true;
                         MouseFound +=1;
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                         return new Pair(0, count);
                     }
                     break;
@@ -551,7 +580,7 @@ public class Main {
             }
                 
             else{
-                t.PrintShip(t.grid);
+                //t.PrintShip(t.grid);
             }
         }
         int sense = 0;
@@ -605,7 +634,7 @@ public class Main {
                                 //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                                 FoundMouse1 =true;
                                 MouseFound +=1;
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                                 continue;
                             }
                             else if(b.GetBotPos().isSame(m2.GetMousePos())){
@@ -615,7 +644,7 @@ public class Main {
                                 //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                                 FoundMouse2 =true;
                                 MouseFound +=1;
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                                 continue;
                             }
                         }
@@ -628,7 +657,7 @@ public class Main {
                                 FoundMouse1 =true;
                                 MouseFound +=1;
                                 Break =true;
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                                 return new Pair(sense, count);
                             }
                             else if(FoundMouse2){
@@ -639,7 +668,7 @@ public class Main {
                                 FoundMouse1 =true;
                                 MouseFound +=1;
                                 Break = true;
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                                 return new Pair(sense, count);
                             }
                             break;
@@ -667,7 +696,7 @@ public class Main {
                                 //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                                 FoundMouse1 =true;
                                 MouseFound +=1;
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                                 continue;
                             }
                             else if(b.GetBotPos().isSame(m2.GetMousePos())){
@@ -677,7 +706,7 @@ public class Main {
                                 //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                                 FoundMouse2 =true;
                                 MouseFound +=1;
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                                 continue;
                             }
                         }
@@ -689,7 +718,7 @@ public class Main {
                                 //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                                 FoundMouse2 =true;
                                 MouseFound +=1;
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                                 return new Pair(sense, count);
                             }
                             else if(FoundMouse2){
@@ -699,7 +728,7 @@ public class Main {
                                 //t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
                                 FoundMouse1 =true;
                                 MouseFound +=1;
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                                 return new Pair(sense, count);
                             }
                             break;
@@ -707,7 +736,7 @@ public class Main {
                     }
                         
                     else{
-                        t.PrintShip(t.grid);
+                        //t.PrintShip(t.grid);
                     }
                 }
                 if(Break){
@@ -729,11 +758,10 @@ public class Main {
         System.out.println();
         System.out.print("Total Sensing and Movement values. Sense: " + SMMoving.getKey() + " Movement: " +SMMoving.getValue());
         */
-         
+        
         Pair SenseMovement = Bot1TestStationaryMouse();
         System.out.println();
-        System.out.print("Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
-
+        System.out.print("Stationary Bot 1: Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
          /* 
         Pair SMiceMoving = Bot1TestMovingMice();
         System.out.println();

@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -27,6 +29,9 @@ public class Shiptest {
     public int totalOpenCells = 1;
     public boolean IsBot = false;
     public ArrayList<Pair> OpenCells;
+    public double [][] MouseGrid1;
+    public double [][] MouseGrid2;
+    //BufferedWriter b = new BufferedWriter();
 
     Random random = new Random();
 
@@ -136,7 +141,7 @@ public class Shiptest {
         for(int i = 0; i<grid.length; i++){
             for (int j = 0; j<grid[i].length; j++){
                 if(isOpen(i,j)|| isDeadEnd(i, j) || isMouse(i, j)){
-                    double d = 1.0/totalOpenCells;
+                    double d = 1.0/(totalOpenCells-1);
                     grid[i][j].setProbOfMouse(d);
                 }
                 else{
@@ -164,6 +169,19 @@ public class Shiptest {
         for(int i = 0; i<g.length; i++){
             for (int j = 0; j<g[i].length; j++){
                 g[i][j] = new Cell(new Pair(i,j), 0);
+            }
+        }
+    }
+
+    public void InitializeMouseGrid(double [][] a){
+        for(int i = 0; i< grid.length; i++){
+            for(int j = 0; j<grid[j].length; j++){
+                if(isOpen(i,j)|| isDeadEnd(i, j) || isMouse(i, j)){
+                    a[i][j] = 1/totalOpenCells;
+                }
+                else{
+                    a[i][j]=0.0;
+                }
             }
         }
     }
@@ -206,7 +224,7 @@ public class Shiptest {
 
 
 
-    public void PrintShip(Cell [][] g){
+    public void PrintShip(Cell [][] g) /*(throws IOException*/{
         for(int i = 0; i<g.length; i++){
             for(int j = 0; j<g[i].length; j++){
                 System.out.print(g[i][j].GetState()+" ");
@@ -214,6 +232,32 @@ public class Shiptest {
             System.out.println();
         }
         System.out.println();
+        /*BufferedWriter b = null;
+
+        try
+        {
+
+            for (int i = 0; i < g.length; i++)
+            {
+                for (int j = 0; j < g[i].length; j++)
+                {
+                    b.write(g[i][j].GetState() + " ");
+                }
+            }
+            b.newLine();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (b != null)
+            {
+                b.close();
+            }
+        }
+            */
     }
 
     public void AdjGrid(){

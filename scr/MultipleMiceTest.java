@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class MultipleMiceTest {
 
-    public static Pair Bot2TestStationaryMouse(){
+    public static Pair Bot2TestStationaryMouse(double alpha){
         Shiptest t = new Shiptest(5, 1);
         Bot b = new Bot(t);
         Mouse m1 = new Mouse(t);
@@ -40,54 +40,135 @@ public class MultipleMiceTest {
             }
         }
         if(!alreadyFoundMouse){
+            int sense = 0;
             for(int i = 0; i<1000; i++){
-                int sense = 0;
-                sense +=1;
-                hasBeeped = b.Sense(0.5, t.StartingMousePos);
-                b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 1, b.GetCellsTraversed());
-                //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
-                t.DeInitilizeEdge(t.edgeTo);
-                t.DeInitilizevisit(t.visited);
-                Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
-                MousePredict = null;
-                MousePredict = b.FindHighestProbCell();
-                Path = null;
-                Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
-                boolean PathCompleted = false;
-                int movement = 0;
-                int j = 0;
-                while(!PathCompleted){
-                    if(j%2 == 0){
-                        count+=1;
-                        if(movement >= Path.size()){
-                            PathCompleted = true;
-                            break;
-                        }
-                        Pair next = b.GridLocationOfPath(Path.get(movement));
-                        b.MoveBotStationary(next);
-                        movement +=1;
-                        if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                            
-                            System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
-                            System.out.println();
-                            t.PrintShip(t.grid);
-                            Break = true;
-                            alreadyFoundMouse = true;
-                            return new Pair(sense, count);
-                        }
-                        else{
-                            t.PrintShip(t.grid);
-                        }
-                    }
-                    
-                    else if(j%2 == 1){
-                        sense +=1;
-                        hasBeeped = b.Sense(0.5, t.StartingMousePos);
-                        b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 1, b.GetCellsTraversed());
-                        //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
+                if(i%2 == 0) {
+                    sense +=1;
+                    hasBeeped = b.Sense(alpha, t.StartingMousePos);
+                    b.UpdateProbabilitiesStationary(hasBeeped, alpha, 1, b.GetCellsTraversed());
+                    //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
+                    t.DeInitilizeEdge(t.edgeTo);
+                    t.DeInitilizevisit(t.visited);
+                    Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
+                    MousePredict = null;
+                    MousePredict = b.FindHighestProbCell();
+                    Path = null;
+                    Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
+                }
+                else if(i%2 == 1){
+                    Pair next = b.GridLocationOfPath(Path.get(0));
+                    b.MoveBotStationary(next);
+                    count +=1;
+                    if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
                         
+                        System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                        System.out.println();
+                        t.PrintShip(t.grid);
+                        Break = true;
+                        alreadyFoundMouse = true;
+                        return new Pair(sense, count);
                     }
-                    j+=1;
+                    else{
+                        t.PrintShip(t.grid);
+                    }
+                }
+            }
+        }
+        return new Pair(-1,-1);
+
+    }
+
+    public static Pair Bot2TestMovingMouse(double alpha){
+        Shiptest t = new Shiptest(5, 1);
+        Bot b = new Bot(t);
+        Mouse m1 = new Mouse(t);
+        t.PrintShip(t.grid);
+        boolean hasBeeped = false;
+        int count = 0;
+        boolean Break = false;
+        Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
+        Pair MousePredict = null;
+        MousePredict = b.FindStartingCellTest();
+        ArrayList<Integer> Path = null;
+        Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
+        boolean alreadyFoundMouse = false;
+        for(int i = 0; i<Path.size(); i++){
+            count +=1;
+            Pair next = b.GridLocationOfPath(Path.get(i));
+            //b.MoveBotStationary(next);
+            b.MoveBot(next);
+            if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
+                System.out.print("BOT FOUND THE MOUSE. Sense: 0 Movement: " + count);
+                Break = true;
+                alreadyFoundMouse =true;
+                return new Pair(0,count);
+            }
+            Pair nextMouseMove = m1.PickRandomNeighbor(m1.GetMousePos().getKey(), m1.GetMousePos().getValue());
+            m1.MoveMouse1(nextMouseMove);
+            if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
+                System.out.print("BOT FOUND THE MOUSE. Sense: 0 Movement: " + count);
+                Break = true;
+                alreadyFoundMouse =true;
+                return new Pair(0,count);
+            }
+            else{
+                t.PrintShip(t.grid);
+            }
+        }
+        if(!alreadyFoundMouse){
+            int sense = 0;
+            for(int i = 0; i<1000; i++){
+                if(i%2 == 0) {
+                    Pair nextMouseMove = m1.PickRandomNeighbor(m1.GetMousePos().getKey(), m1.GetMousePos().getValue());
+                    m1.MoveMouse1(nextMouseMove);
+                    if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
+                        System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                        t.PrintShip(t.grid);
+                        Break = true;
+                        alreadyFoundMouse =true;
+                        return new Pair(sense,count);
+                    }
+                    sense +=1;
+                    hasBeeped = b.Sense(alpha, t.StartingMousePos);
+                    //b.UpdateProbabilitiesStationary(hasBeeped, alpha, 1, b.GetCellsTraversed());
+                    b.UpdateProbabilitiesMoving(hasBeeped, alpha, 1);
+                    t.DeInitilizeEdge(t.edgeTo);
+                    t.DeInitilizevisit(t.visited);
+                    Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
+                    MousePredict = null;
+                    MousePredict = b.FindHighestProbCell();
+                    Path = null;
+                    Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
+                    
+                    t.PrintShip(t.grid);
+                    
+                }
+                else if(i%2 == 1){
+                    Pair next = b.GridLocationOfPath(Path.get(0));
+                    //b.MoveBotStationary(next);
+                    b.MoveBot(next);
+                    count +=1;
+                    if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
+                        
+                        System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                        System.out.println();
+                        t.PrintShip(t.grid);
+                        Break = true;
+                        alreadyFoundMouse = true;
+                        return new Pair(sense, count);
+                    }
+                    Pair nextMouseMove = m1.PickRandomNeighbor(m1.GetMousePos().getKey(), m1.GetMousePos().getValue());
+                    m1.MoveMouse1(nextMouseMove);
+                    if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
+                        System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                        t.PrintShip(t.grid);
+                        Break = true;
+                        alreadyFoundMouse =true;
+                        return new Pair(sense,count);
+                    }
+                    else{
+                        t.PrintShip(t.grid);
+                    }
                 }
             }
         }
@@ -101,8 +182,14 @@ public class MultipleMiceTest {
 
     public static void main(String args[]){
 
-        Pair SenseMovement = Bot2TestStationaryMouse();
-        System.out.print("Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
+        //Pair SenseMovement = Bot2TestStationaryMouse(0.2);
+        //System.out.println();
+        //System.out.print("Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
+        
+        Pair SenseMovement2 = Bot2TestMovingMouse(0.2);
+        System.out.println();
+        System.out.print("Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+        
         /* 
         Pair SMMoving = Bot1TestMovingMice();
         System.out.println();
