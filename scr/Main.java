@@ -96,12 +96,7 @@ public class Main {
         Bot b = new Bot(t);
         Mouse m1 = new Mouse(t);
         t.StartingProbabilities();
-        try{
-            t.PrintShip(t.grid);
-        }
-        catch(IOException e){
-            System.out.print("exception: "+ e);
-        }
+        t.PrintShip(t.grid);
 
         boolean hasBeeped = false;
         int count = 0;
@@ -132,12 +127,7 @@ public class Main {
                 return new Pair(0,count);
             }
             else{
-                try{
-                    t.PrintShip(t.grid);
-                }
-                catch(IOException e){
-                    System.out.print("exception: "+ e);
-                }
+                t.PrintShip(t.grid);
             }
         }
         if(!alreadyFoundMouse){
@@ -165,12 +155,7 @@ public class Main {
                         int sense = j +1;
                         System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
                         System.out.println();
-                        try{
-                            t.PrintShip(t.grid);
-                        }
-                        catch(IOException e){
-                            System.out.print("exception: "+ e);
-                        }
+                        t.PrintShip(t.grid);
                         Break = true;
                         return new Pair(sense, count);
                     }
@@ -180,22 +165,12 @@ public class Main {
                         int sense = j +1;
                         System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
                         System.out.println();
-                        try{
-                            t.PrintShip(t.grid);
-                        }
-                        catch(IOException e){
-                            System.out.print("exception: "+ e);
-                        }
+                        t.PrintShip(t.grid);
                         Break = true;
                         return new Pair(sense, count);
                     }
                     else{
-                        try{
-                            t.PrintShip(t.grid);
-                        }
-                        catch(IOException e){
-                            System.out.print("exception: "+ e);
-                        }
+                        t.PrintShip(t.grid);
                     }
                 }
                 if(Break){
@@ -207,16 +182,19 @@ public class Main {
     }
 
     public static Pair Bot1TestStationaryMice(){
-        Shiptest t = new Shiptest(2);
+        Shiptest t = new Shiptest(5,2);
         Bot b = new Bot(t);
         Mouse m1 = new Mouse(t);
         Mouse m2 = new Mouse(t);
-        //t.PrintShip(t.grid);
+        t.InitializeMouseGrid1();
+        t.InitializeMouseGrid2();
+
+        t.PrintShip(t.grid);
         boolean hasBeeped = false;
         int count = 0;
         Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
         Pair MousePredict = null;
-        MousePredict = b.FindStartingCell();
+        MousePredict = b.FindStartingCellTest();
         ArrayList<Integer> Path = null;
         Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
         boolean FoundMouse1 = false;
@@ -225,7 +203,12 @@ public class Main {
         for(int i = 0; i<Path.size(); i++){
             count +=1;
             Pair next = b.GridLocationOfPath(Path.get(i));
-            b.MoveBotStationary(next);
+            if(MouseFound > 0){
+                b.MoveBotStationary(next);
+            }
+            else if(MouseFound == 0){
+                b.UpdateMoveStationaryMice(next);
+            }
             //b.MoveBot(next);
             if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
                 System.out.print("BOT FOUND THE MOUSE. Sense: 0 Movement: " + count);
@@ -236,6 +219,9 @@ public class Main {
                         t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setMouse(false);
                         //t.StartingProbabilities();
                         t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
+                        b.ReInitializeProbabilities();
+                        t.MouseGrid1[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
+                        t.MouseGrid2[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
                         FoundMouse1 =true;
                         MouseFound +=1;
                         continue;
@@ -245,6 +231,9 @@ public class Main {
                         t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setMouse(false);
                         //t.StartingProbabilities();
                         t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
+                        b.ReInitializeProbabilities();
+                        t.MouseGrid1[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
+                        t.MouseGrid2[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
                         FoundMouse2 =true;
                         MouseFound +=1;
                         continue;
@@ -314,7 +303,9 @@ public class Main {
             }
                 */
             else{
-                //t.PrintShip(t.grid);
+                t.MouseGrid1[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
+                t.MouseGrid2[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
+                t.PrintShip(t.grid);
             }
         }
         int sense = 0;
@@ -342,20 +333,35 @@ public class Main {
                     //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
                 }
                 else if(MouseFound == 0){
-                    b.UpdateProbabilitiesStationary(hasBeeped, 0.5, 2, b.GetCellsTraversed());
+                    double [][] temp = null; 
+                    temp = b.Replicate();
+                    b.UpdateMouse1Grid(hasBeeped, 0.5);
+                    b.UpdateMouse2Grid(hasBeeped, 0.5, temp);
+                    b.Normalization(t.MouseGrid1);
+                    b.Normalization(t.MouseGrid2);
                     //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 2);
                 }
                 t.DeInitilizeEdge(t.edgeTo);
                 t.DeInitilizevisit(t.visited);
                 Bot.bfs(t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.AdjList, t.AdjListPar, t.visited, t.edgeTo);
                 MousePredict = null;
-                MousePredict = b.FindHighestProbCell();
+                if(MouseFound == 0){
+                    MousePredict = b.FindHighestProbCellMice();
+                }
+                else if (MouseFound == 1){
+                    MousePredict = b.FindHighestProbCell();
+                }
                 Path = null;
                 Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
                 for(int i = 0; i<Path.size(); i++){
                     count +=1;
                     Pair next = b.GridLocationOfPath(Path.get(i));
-                    b.MoveBotStationary(next);
+                    if(MouseFound > 0){
+                        b.MoveBotStationary(next);
+                    }
+                    else if(MouseFound == 0){
+                        b.UpdateMoveStationaryMice(next);
+                    }
                     //b.MoveBot(next);
                     if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
                         System.out.print("BOT FOUND THE MOUSE. Sense:" + sense + " Movement: " + count);
@@ -366,6 +372,9 @@ public class Main {
                                 t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setMouse(false);
                                 //t.StartingProbabilities();
                                 t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
+                                b.ReInitializeProbabilities();
+                                t.MouseGrid1[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
+                                t.MouseGrid2[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
                                 FoundMouse1 =true;
                                 MouseFound +=1;
                             }
@@ -374,6 +383,9 @@ public class Main {
                                 t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setMouse(false);
                                 //t.StartingProbabilities();
                                 t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].setProbOfMouse(0.00);
+                                b.ReInitializeProbabilities();
+                                t.MouseGrid1[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
+                                t.MouseGrid2[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
                                 FoundMouse2 =true;
                                 MouseFound +=1;
                             }
@@ -437,7 +449,9 @@ public class Main {
                     }
                         */
                     else{
-                        //t.PrintShip(t.grid);
+                        t.MouseGrid1[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
+                        t.MouseGrid2[b.GetBotPos().getKey()][b.GetBotPos().getValue()] = 0.0;
+                        t.PrintShip(t.grid);
                     }
                 }
                 if(Break){
@@ -758,20 +772,21 @@ public class Main {
         System.out.println();
         System.out.print("Total Sensing and Movement values. Sense: " + SMMoving.getKey() + " Movement: " +SMMoving.getValue());
         */
-        
+        /* 
         Pair SenseMovement = Bot1TestStationaryMouse();
         System.out.println();
         System.out.print("Stationary Bot 1: Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
+        */
          /* 
         Pair SMiceMoving = Bot1TestMovingMice();
         System.out.println();
         System.out.print("Total Sensing and Movement values. Sense: " + SMiceMoving.getKey() + " Movement: " +SMiceMoving.getValue());
         */
-        /* 
+        
         Pair MiceSenseMovement = Bot1TestStationaryMice();
         System.out.println();
         System.out.print("Total Sensing and Movement values. Sense: " + MiceSenseMovement.getKey() + " Movement: " +MiceSenseMovement.getValue());
-        */
+        
         
         
         

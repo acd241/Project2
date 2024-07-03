@@ -95,33 +95,126 @@ public class Bot {
 
     }
 
-    public double Normalization(boolean beep, double alpha){
-        double SumOfProb = 0.0;
-        if(beep){
-            for(int i = 0; i<s.grid.length; i++){
-                for(int j = 0; j<s.grid.length; j++){
-                    int d1 = Math.abs(s.StartingMousePos.getKey() - pos.getKey()) + Math.abs(s.StartingMousePos.getValue() - pos.getValue());
-                    int d2 = Math.abs(s.SecondMousePos.getKey() - pos.getKey()) + Math.abs(s.SecondMousePos.getValue() - pos.getValue());
-                    double ProbOfBeepAtLocation = 1-((1-Math.exp(((-alpha)*(d1-1))))*(1-Math.exp(((-alpha)*(d2-1)))));
-                    double ProbTemp = ProbOfBeepAtLocation * s.grid[i][j].getProbOfMouse();
-                    SumOfProb += ProbTemp;
+    public double SumProbMapMouse2(int row, int col, boolean beep, double alpha){
+        double sumOfProb = 0.0;
+        for(int i = 0; i<s.MouseGrid2.length; i++){
+            for(int j = 0; j<s.MouseGrid2[i].length; j++){
+                if(i == row && j == col){
+                    continue;
+
+                }
+                else{
+                    if(beep){
+                        double prob = s.MouseGrid2[i][j] * (1-(1-ProbOfBeep(beep, alpha, new Pair(row, col)))* (1-ProbOfBeep(beep, alpha, new Pair(i,j))));
+                        sumOfProb += prob;
+                    }
+                    else{
+                        double prob = s.MouseGrid2[i][j] * (1-ProbOfBeep(beep, alpha, new Pair(row, col)))* (1-ProbOfBeep(beep, alpha, new Pair(i,j)));
+                        sumOfProb += prob;
+                    }
                 }
             }
         }
-        else if(!beep){
-            for(int i = 0; i<s.grid.length; i++){
-                for(int j = 0; j<s.grid.length; j++){
-                    int d1 = Math.abs(s.StartingMousePos.getKey() - pos.getKey()) + Math.abs(s.StartingMousePos.getValue() - pos.getValue());
-                    int d2 = Math.abs(s.SecondMousePos.getKey() - pos.getKey()) + Math.abs(s.SecondMousePos.getValue() - pos.getValue());
-                    double ProbOfNoBeepAtLocation = ((1-Math.exp(((-alpha)*(d1-1))))*(1-Math.exp(((-alpha)*(d2-1)))));
-                    double ProbTemp = ProbOfNoBeepAtLocation * s.grid[i][j].getProbOfMouse();
-                    SumOfProb += ProbTemp;
-                }
-            }
-        }
-        return SumOfProb;
+        return sumOfProb;
+
     }
 
+    public double SumProbMapMouse1(int row, int col, boolean beep, double alpha, double [][] temp){
+        double sumOfProb = 0.0;
+        for(int i = 0; i<temp.length; i++){
+            for(int j = 0; j<temp[i].length; j++){
+                if(i == row && j == col){
+                    continue;
+
+                }
+                else{
+                    if(beep){
+                        double prob = temp[i][j] * (1-(1-ProbOfBeep(beep, alpha, new Pair(row, col)))* (1-ProbOfBeep(beep, alpha, new Pair(i,j))));
+                        sumOfProb += prob;
+                    }
+                    else{
+                        double prob = temp[i][j] * (1-ProbOfBeep(beep, alpha, new Pair(row, col)))* (1-ProbOfBeep(beep, alpha, new Pair(i,j)));
+                        sumOfProb += prob;
+                    }
+                }
+            }
+        }
+        return sumOfProb;
+    }
+
+    public void UpdateMouse1Grid(boolean beep, double alpha){
+        for(int i = 0; i<s.MouseGrid1.length; i++){
+            for(int j = 0; j<s.MouseGrid1[i].length; j++){
+                if(s.isClosed(i,j)){
+                    s.MouseGrid1[i][j] = 0.0;
+                    continue;
+                }
+                String coord = i + "," + j;
+                if(CellsTraversed.contains(coord)){
+                    s.MouseGrid1[i][j] = 0.0;
+                    continue;
+                }
+                double BeepInKGivenMInI = SumProbMapMouse2(i, j, beep, alpha);
+                double ProbMInI = s.MouseGrid1[i][j];
+                s.MouseGrid1[i][j] = ProbMInI * BeepInKGivenMInI;
+            }
+        }
+    }
+
+    public double [][] Replicate(){
+        double [][] temp = new double [s.MouseGrid1.length][s.MouseGrid1.length];
+        for(int i = 0; i<s.MouseGrid1.length; i++){
+            for(int j = 0; j<s.MouseGrid1[i].length; j++){
+                temp[i][j] = s.MouseGrid1[i][j];
+            }
+        }
+        return temp;
+    }
+
+    public void UpdateMouse2Grid(boolean beep, double alpha, double [][] temp){
+        
+        for(int i = 0; i<s.MouseGrid2.length; i++){
+            for(int j = 0; j<s.MouseGrid2[i].length; j++){
+                if(s.isClosed(i,j)){
+                    s.MouseGrid2[i][j] = 0.0;
+                    continue;
+                }
+                String coord = i + "," + j;
+                if(CellsTraversed.contains(coord)){
+                    s.MouseGrid2[i][j] = 0.0;
+                    continue;
+                }
+                double BeepInKGivenMInI = SumProbMapMouse1(i, j, beep, alpha, temp);
+                double ProbMInI = s.MouseGrid2[i][j];
+                s.MouseGrid2[i][j] = ProbMInI * BeepInKGivenMInI;
+            }
+        }
+    }
+
+    public void Normalization(double [][] a){
+        double probTotal = 0.0;
+        for(int i = 0; i<a.length; i++){
+            for(int j = 0; j<a[i].length; j++){
+                probTotal += a[i][j];
+            }
+        }
+        for(int i = 0; i<a.length; i++){
+            for(int j = 0; j<a[i].length; j++){
+                a[i][j] = a[i][j]/probTotal;
+            }
+        }
+    }
+
+    public void ReInitializeProbabilities(){
+        for(int i = 0; i<s.grid.length; i++){
+            for(int j = 0; j<s.grid[i].length; j++){
+                double Numerator = (s.MouseGrid1[i][j] * s.MouseGrid2[pos.getKey()][pos.getValue()]) + (s.MouseGrid1[pos.getKey()][pos.getValue()]* s.MouseGrid1[i][j]);
+                double Denom = s.MouseGrid2[pos.getKey()][pos.getValue()] + s.MouseGrid1[pos.getKey()][pos.getValue()] -(s.MouseGrid2[pos.getKey()][pos.getValue()]*s.MouseGrid1[pos.getKey()][pos.getValue()]);
+                s.grid[i][j].setProbOfMouse(Numerator/Denom);
+            }
+        }
+    }
+/* 
     public void UPMovingMice(boolean beep, double alpha){
         double ProbTotal = 0.00;
         for(int i = 0; i<s.grid.length; i++){
@@ -141,10 +234,10 @@ public class Bot {
                     double MouseInCell = s.grid[i][j].getProbOfMouse();
                     double NewProb = (probGivenMouseInCell * MouseInCell);
                     ProbTotal += NewProb;
-                    /* 
+                    
                     double TotalProbOfBeep = (probGivenMouseInCell * MouseInCell)+ (probGivenMouseInCell*(1-MouseInCell));
                     double NewMouseProbOfCell = (probGivenMouseInCell * MouseInCell)/TotalProbOfBeep;
-                    */
+                    
                     s.grid[i][j].setProbOfMouse(NewProb);
                 }
                 else{
@@ -158,10 +251,10 @@ public class Bot {
                     double MouseInCell = s.grid[i][j].getProbOfMouse();
                     double NewProb = (probGivenMouseInCell * MouseInCell);
                     ProbTotal+=NewProb;
-                    /* 
+                    
                     double TotalProbOfNoBeep = (probGivenMouseInCell * MouseInCell) + (1.0 * (1-MouseInCell));
                     double NewMouseProbOfCell = (probGivenMouseInCell * MouseInCell)/TotalProbOfNoBeep;
-                    */
+                    
                     s.grid[i][j].setProbOfMouse(NewProb);
                 }
             }
@@ -174,6 +267,8 @@ public class Bot {
             }
         }
     }
+
+
 
 
     public void UPStationMice(boolean beep, double alpha, HashSet<String> CellsChecked){
@@ -224,7 +319,7 @@ public class Bot {
             }
         }
     }
-
+*/
 
     public void UpdateProbabilitiesStationary(boolean beep, double alpha, int numOfMice, HashSet<String> CellsChecked){
         double ProbTotal = 0.00;
@@ -394,6 +489,60 @@ public class Bot {
         
     }
 
+    public Pair FindHighestProbCellMiceGrid(double [][] MouseGrid){
+        double max = 0.0;
+        Pair p = new Pair(-1,-1);
+        for(int i = 0; i <MouseGrid.length; i++){
+            for(int j = 0; j<MouseGrid.length; j++){
+                if(MouseGrid[i][j] > max){
+                    max = MouseGrid[i][j];
+                    p.setKey(i);
+                    p.setValue(j);
+                }
+            }
+        }
+
+        int least = 1000;
+        for(int i = 0; i <MouseGrid.length; i++){
+            for(int j = 0; j<MouseGrid.length; j++){
+                if(MouseGrid[i][j] == max){
+                    int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
+                    if(d<least){
+                        least = d;
+                        p.setKey(i);
+                        p.setValue(j);
+                    }
+                }
+            }
+        }
+        
+        return p;
+    }
+
+    public Pair FindHighestProbCellMice(){
+        Pair highMouse1 = FindHighestProbCellMiceGrid(s.MouseGrid1);
+        Pair highMouse2 = FindHighestProbCellMiceGrid(s.MouseGrid2);
+        if(s.MouseGrid1[highMouse1.getKey()][highMouse1.getValue()] > s.MouseGrid2[highMouse2.getKey()][highMouse2.getValue()]){
+            return highMouse1;
+        }
+        else if(s.MouseGrid2[highMouse2.getKey()][highMouse2.getValue()]> s.MouseGrid1[highMouse1.getKey()][highMouse1.getValue()]){
+            return highMouse2;
+        }
+        else{
+            int d = Math.abs(pos.getKey() - highMouse1.getKey()) + Math.abs(pos.getValue() - highMouse1.getValue());
+            int d1 = Math.abs(pos.getKey() - highMouse2.getKey()) + Math.abs(pos.getValue() - highMouse2.getValue());
+            if(d<d1){
+                return highMouse1;
+            }
+            else if(d1< d){
+                return highMouse2;
+            }
+            else{
+                return highMouse1;
+            }
+        }
+    }
+
     public ArrayList<Pair> PotentialNextMove(int row, int col){
         ArrayList<Pair> a = new ArrayList<Pair>();
         if(s.InBounds(row-1, col)){
@@ -461,6 +610,37 @@ public class Bot {
         s.BotPosition = p;
         s.grid[p.getKey()][p.getValue()].setBot(true);
         s.grid[p.getKey()][p.getValue()].SetState(3);
+    }
+
+    public void UpdateMoveStationaryMice(Pair p){
+        s.grid[pos.getKey()][pos.getValue()].SetState(1);
+        s.grid[pos.getKey()][pos.getValue()].setBot(false);
+        s.grid[pos.getKey()][pos.getValue()].setProbOfMouse(0.00);
+        UpdateMouseGrids();
+        String coord = p.getKey() + "," + p.getValue();
+        CellsTraversed.add(coord);
+        this.pos = p;
+        s.BotPosition = p;
+        s.grid[p.getKey()][p.getValue()].setBot(true);
+        s.grid[p.getKey()][p.getValue()].SetState(3);
+
+    }
+
+    public void UpdateMouseGrids(){
+        for(int i = 0; i <s.MouseGrid1.length; i++){
+            for(int j = 0; j<s.MouseGrid1[i].length; j++){
+                if(s.MouseGrid1[i][j] != 0.00){
+                    s.MouseGrid1[i][j]= ((s.MouseGrid1[i][j]/(1-s.MouseGrid1[i][j])));
+                }
+            }
+        }
+        for(int i = 0; i <s.MouseGrid2.length; i++){
+            for(int j = 0; j<s.MouseGrid2[i].length; j++){
+                if(s.MouseGrid2[i][j] != 0.00){
+                    s.MouseGrid2[i][j]= ((s.MouseGrid2[i][j]/(1-s.MouseGrid2[i][j])));
+                }
+            }
+        }
     }
 
     public void Update(){

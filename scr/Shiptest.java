@@ -78,6 +78,8 @@ public class Shiptest {
     public Shiptest(int Mice){
         grid = new Cell[40][40];
         adjecencyGrid = new int [40][40];
+        MouseGrid1 = new double [40][40];
+        MouseGrid2 = new double [40][40];
         int x = random.nextInt(40);
         int y = random.nextInt(40);
         PopulateShip(grid);
@@ -118,6 +120,8 @@ public class Shiptest {
     public Shiptest(int size, int mice){
         grid = new Cell[5][5];
         adjecencyGrid = new int [5][5];
+        MouseGrid1 = new double [5][5];
+        MouseGrid2 = new double [5][5];
         int x = random.nextInt(5);
         int y = random.nextInt(5);
         PopulateShip(grid);
@@ -173,14 +177,26 @@ public class Shiptest {
         }
     }
 
-    public void InitializeMouseGrid(double [][] a){
-        for(int i = 0; i< grid.length; i++){
-            for(int j = 0; j<grid[j].length; j++){
+    public void InitializeMouseGrid1(){
+        for(int i = 0; i< MouseGrid1.length; i++){
+            for(int j = 0; j<MouseGrid1[i].length; j++){
                 if(isOpen(i,j)|| isDeadEnd(i, j) || isMouse(i, j)){
-                    a[i][j] = 1/totalOpenCells;
+                    MouseGrid1[i][j] = 1.0/(totalOpenCells-1);
                 }
                 else{
-                    a[i][j]=0.0;
+                    MouseGrid1[i][j]=0.0;
+                }
+            }
+        }
+    }
+    public void InitializeMouseGrid2(){
+        for(int i = 0; i< MouseGrid2.length; i++){
+            for(int j = 0; j<MouseGrid2[i].length; j++){
+                if(isOpen(i,j)|| isDeadEnd(i, j) || isMouse(i, j)){
+                    MouseGrid2[i][j] = 1.0/(totalOpenCells-1);
+                }
+                else{
+                    MouseGrid2[i][j]=0.0;
                 }
             }
         }
