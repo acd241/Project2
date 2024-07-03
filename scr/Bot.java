@@ -109,7 +109,7 @@ public class Bot {
                         sumOfProb += prob;
                     }
                     else{
-                        double prob = s.MouseGrid2[i][j] * (1-ProbOfBeep(beep, alpha, new Pair(row, col)))* (1-ProbOfBeep(beep, alpha, new Pair(i,j)));
+                        double prob = s.MouseGrid2[i][j] * (1-ProbOfBeep(true, alpha, new Pair(row, col)))* (1-ProbOfBeep(true, alpha, new Pair(i,j)));
                         sumOfProb += prob;
                     }
                 }
@@ -133,7 +133,7 @@ public class Bot {
                         sumOfProb += prob;
                     }
                     else{
-                        double prob = temp[i][j] * (1-ProbOfBeep(beep, alpha, new Pair(row, col)))* (1-ProbOfBeep(beep, alpha, new Pair(i,j)));
+                        double prob = temp[i][j] * (1-ProbOfBeep(true, alpha, new Pair(row, col)))* (1-ProbOfBeep(true, alpha, new Pair(i,j)));
                         sumOfProb += prob;
                     }
                 }
@@ -184,12 +184,50 @@ public class Bot {
                     s.MouseGrid2[i][j] = 0.0;
                     continue;
                 }
+
                 double BeepInKGivenMInI = SumProbMapMouse1(i, j, beep, alpha, temp);
                 double ProbMInI = s.MouseGrid2[i][j];
                 s.MouseGrid2[i][j] = ProbMInI * BeepInKGivenMInI;
             }
         }
     }
+
+    public void UpdateMouse2GridMoving(boolean beep, double alpha, double [][] temp){
+        
+        for(int i = 0; i<s.MouseGrid2.length; i++){
+            for(int j = 0; j<s.MouseGrid2[i].length; j++){
+                if(s.isClosed(i,j)){
+                    s.MouseGrid2[i][j] = 0.0;
+                    continue;
+                }
+                if(s.isBot(i,j)){
+                    s.MouseGrid2[i][j] = 0.0;
+                    continue;
+                }
+                double BeepInKGivenMInI = SumProbMapMouse1(i, j, beep, alpha, temp);
+                double ProbMInI = s.MouseGrid2[i][j];
+                s.MouseGrid2[i][j] = ProbMInI * BeepInKGivenMInI;
+            }
+        }
+    }
+    public void UpdateMouse1GridMoving(boolean beep, double alpha){
+        for(int i = 0; i<s.MouseGrid1.length; i++){
+            for(int j = 0; j<s.MouseGrid1[i].length; j++){
+                if(s.isClosed(i,j)){
+                    s.MouseGrid1[i][j] = 0.0;
+                    continue;
+                }
+                if(s.isBot(i,j)){
+                    s.MouseGrid2[i][j] = 0.0;
+                    continue;
+                }
+                double BeepInKGivenMInI = SumProbMapMouse2(i, j, beep, alpha);
+                double ProbMInI = s.MouseGrid1[i][j];
+                s.MouseGrid1[i][j] = ProbMInI * BeepInKGivenMInI;
+            }
+        }
+    }
+
 
     public void Normalization(double [][] a){
         double probTotal = 0.0;
@@ -494,7 +532,7 @@ public class Bot {
         Pair p = new Pair(-1,-1);
         for(int i = 0; i <MouseGrid.length; i++){
             for(int j = 0; j<MouseGrid.length; j++){
-                if(MouseGrid[i][j] > max){
+                if(MouseGrid[i][j] > max && !s.isBot(i,j)){
                     max = MouseGrid[i][j];
                     p.setKey(i);
                     p.setValue(j);
@@ -505,7 +543,7 @@ public class Bot {
         int least = 1000;
         for(int i = 0; i <MouseGrid.length; i++){
             for(int j = 0; j<MouseGrid.length; j++){
-                if(MouseGrid[i][j] == max){
+                if(MouseGrid[i][j] == max && !s.isBot(i,j)){
                     int d = Math.abs(pos.getKey() - i) + Math.abs(pos.getValue() - j);
                     if(d<least){
                         least = d;
@@ -522,10 +560,10 @@ public class Bot {
     public Pair FindHighestProbCellMice(){
         Pair highMouse1 = FindHighestProbCellMiceGrid(s.MouseGrid1);
         Pair highMouse2 = FindHighestProbCellMiceGrid(s.MouseGrid2);
-        if(s.MouseGrid1[highMouse1.getKey()][highMouse1.getValue()] > s.MouseGrid2[highMouse2.getKey()][highMouse2.getValue()]){
+        if(s.MouseGrid1[highMouse1.getKey()][highMouse1.getValue()] > s.MouseGrid2[highMouse2.getKey()][highMouse2.getValue()] && !highMouse1.isSame(pos)){
             return highMouse1;
         }
-        else if(s.MouseGrid2[highMouse2.getKey()][highMouse2.getValue()]> s.MouseGrid1[highMouse1.getKey()][highMouse1.getValue()]){
+        else if(s.MouseGrid2[highMouse2.getKey()][highMouse2.getValue()]> s.MouseGrid1[highMouse1.getKey()][highMouse1.getValue()] && !highMouse2.isSame(pos)){
             return highMouse2;
         }
         else{
