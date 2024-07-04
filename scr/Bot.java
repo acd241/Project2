@@ -522,7 +522,21 @@ public class Bot {
                 }
             }
         }
-        
+        int x = 0;
+        int y = 0;
+        if(p.getKey() == -1 || p.getValue() == -1){
+            while(true){
+                x = random.nextInt(s.grid.length);
+                y = random.nextInt(s.grid.length);
+                if((s.isOpen(x, y) || s.isDeadEnd(x,y) || s.isMouse(x, y)) && s.grid[x][y].getProbOfMouse()!=0.0){
+                    p = new Pair(x,y);
+                    return p;
+                }
+                else{
+                    continue;
+                }
+            }
+        }
         return p;
         
     }
@@ -707,6 +721,9 @@ public class Bot {
         }
         while(!s.isEmpty()){
             a.add(s.pop());
+        }
+        if(a.size() == 0){
+            a.add(Start);
         }
         return a;
     }
