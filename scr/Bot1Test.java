@@ -1684,7 +1684,7 @@ public class Bot1Test {
         // }
         // double AvgSense4 = (sense4 *1.0)/(numberOfTrials4 - skip4);
         // double AvgMovement4 = (count4 * 1.0)/ (numberOfTrials4-skip4);
-        // System.out.print("Bot1 Moving Mice Average Sense: " + AvgSense4 + " Average Movement: " + AvgMovement3 + " Alpha Value: " + k/10);
+        // System.out.print("Bot1 Moving Mice Average Sense: " + AvgSense4 + " Average Movement: " + AvgMovement4 + " Alpha Value: " + k/10);
 
         
         
