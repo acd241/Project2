@@ -1551,82 +1551,90 @@ public class Bot2Test {
 
         //BOT2 STATIONARY MOUSE AVG TEST VALUES
 
-        /* 
-        int sense1 = 0;
-        int count1 = 0;
-        int skip1 = 0;
-        for(int i = 0; i< 50; i++){
-            Pair SenseMovement1 = Bot2TestStationaryMouseAVG(0.2);
-            if(SenseMovement1.getKey() > 1000 || SenseMovement1.getValue()> 1000){
-                skip1 +=1;
-                continue;
-            }
-            sense1 += SenseMovement1.getKey();
-            count1 += SenseMovement1.getValue();
-        }
-        double AvgSense1 = (sense1 *1.0)/(50 - skip1);
-        double AvgMovement1 = (count1 * 1.0)/ (50-skip1);
-        System.out.print("Bot2 Stationary Mouse Average Sense: " + AvgSense1 + " Average Movement: " + AvgMovement1);
-        */
+        // for (double k = 0; k < 11.0; k += 1.0)
+        // {
+        //     int sense1 = 0;
+        //     int count1 = 0;
+        //     int skip1 = 0;
+        //     int numberOfTrials1 = 50;
+        //     for(int i = 0; i< numberOfTrials1; i++){
+        //         Pair SenseMovement1 = Bot2TestStationaryMouseAVG(k/10);
+        //         if(SenseMovement1.getKey() > 1000 || SenseMovement1.getValue()> 1000){
+        //             skip1 +=1;
+        //             continue;
+        //         }
+        //         sense1 += SenseMovement1.getKey();
+        //         count1 += SenseMovement1.getValue();
+        //     }
+        //     double AvgSense1 = (sense1 *1.0)/(numberOfTrials1 - skip1);
+        //     double AvgMovement1 = (count1 * 1.0)/ (numberOfTrials1-skip1);
+        //     System.out.print("Bot2 Stationary Mouse Average Sense: " + AvgSense1 + " Average Movement: " + AvgMovement1  + " Alpha Value: " + k/10);
+        // }    
 
         //BOT2 MOVING MOUSE AVG TEST VALUES
 
-        /* 
-        int sense2 = 0;
-        int count2 = 0;
-        int skip2 = 0;
-        for(int i = 0; i< 50; i++){
-            Pair SenseMovement2 = Bot2TestMovingMouseAVG(0.2);
-            if(SenseMovement2.getKey() > 1000 || SenseMovement2.getValue()> 1000){
-                skip2 +=1;
-                continue;
-            }
-            sense2+= SenseMovement2.getKey();
-            count2 += SenseMovement2.getValue();
-        }
-        double AvgSense2 = (sense2 *1.0)/(50 - skip2);
-        double AvgMovement2 = (count2 * 1.0)/ (50-skip2);
-        System.out.print("Bot2 Moving Mouse Average Sense: " + AvgSense2 + " Average Movement: " + AvgMovement2);
-        */
+        // for (double k = 0; k < 11.0; k += 1.0)
+        // {
+        //     int sense2 = 0;
+        //     int count2 = 0;
+        //     int skip2 = 0;
+        //     int numberOfTrials2 = 50;
+        //     for(int i = 0; i< numberOfTrials2; i++){
+        //         Pair SenseMovement2 = Bot2TestMovingMouseAVG(k/10);
+        //         if(SenseMovement2.getKey() > 1000 || SenseMovement2.getValue()> 1000){
+        //             skip2 +=1;
+        //             continue;
+        //         }
+        //         sense2+= SenseMovement2.getKey();
+        //         count2 += SenseMovement2.getValue();
+        //     }
+        //     double AvgSense2 = (sense2 *1.0)/(numberOfTrials2 - skip2);
+        //     double AvgMovement2 = (count2 * 1.0)/ (numberOfTrials2-skip2);
+        //     System.out.print("Bot2 Moving Mouse Average Sense: " + AvgSense2 + " Average Movement: " + AvgMovement2 + " Alpha Value: " + k/10);
+        // }    
 
         //BOT2 STATIONARY MICE AVG TEST VALUES
 
-        /* 
-        int sense3 = 0;
-        int count3 = 0;
-        int skip3 = 0;
-        for(int i = 0; i< 50; i++){
-            Pair SenseMovement3 = Bot2TestStationaryMiceAVG(0.2);
-            if(SenseMovement3.getKey() > 1000 || SenseMovement3.getValue()> 1000){
-                skip3 +=1;
-                continue;
-            }
-            sense3 += SenseMovement3.getKey();
-            count3 += SenseMovement3.getValue();
-        }
-        double AvgSense3 = (sense3 *1.0)/(50 - skip3);
-        double AvgMovement3 = (count3 * 1.0)/ (50-skip3);
-        System.out.print("Bot2 Stationary Mice Average Sense: " + AvgSense3 + " Average Movement: " + AvgMovement3);
-        */
+        // for (double k = 0; k < 11.0; k += 1.0)
+        // {
+        //     int sense3 = 0;
+        //     int count3 = 0;
+        //     int skip3 = 0;
+        //     int numberOfTrials3 = 50;
+        //     for(int i = 0; i< numberOfTrials3; i++){
+        //         Pair SenseMovement3 = Bot2TestStationaryMiceAVG(k/10);
+        //         if(SenseMovement3.getKey() > 1000 || SenseMovement3.getValue()> 1000){
+        //             skip3 +=1;
+        //             continue;
+        //         }
+        //         sense3 += SenseMovement3.getKey();
+        //         count3 += SenseMovement3.getValue();
+        //     }
+        //     double AvgSense3 = (sense3 *1.0)/(numberOfTrials3 - skip3);
+        //     double AvgMovement3 = (count3 * 1.0)/ (numberOfTrials3-skip3);
+        //     System.out.print("Bot2 Stationary Mice Average Sense: " + AvgSense3 + " Average Movement: " + AvgMovement3 + " Alpha Value: " + k/10);
+        // }
 
         //BOT2 MOVING MICE AVG TEST VALUES
-        /* 
-        int sense4 = 0;
-        int count4 = 0;
-        int skip4 = 0;
-        for(int i = 0; i< 50; i++){
-            Pair SenseMovement4 = Bot2TestMovingMiceAVG(0.2);
-            if(SenseMovement4.getKey() > 1000 || SenseMovement4.getValue()> 1000){
-                skip4 +=1;
-                continue;
-            }
-            sense4 += SenseMovement4.getKey();
-            count4 += SenseMovement4.getValue();
-        }
-        double AvgSense4 = (sense4 *1.0)/(50 - skip4);
-        double AvgMovement4 = (count4 * 1.0)/ (50-skip4);
-        System.out.print("Bot2 Moving Mice Average Sense: " + AvgSense4 + " Average Movement: " + AvgMovement4);
-        */
+        // for (double k = 0; k < 11.0; k += 1.0)
+        // {
+        //     int sense4 = 0;
+        //     int count4 = 0;
+        //     int skip4 = 0;
+        //     int numberOfTrials4 = 50;
+        //     for(int i = 0; i< numberOfTrials4; i++){
+        //         Pair SenseMovement4 = Bot2TestMovingMiceAVG(k/10);
+        //         if(SenseMovement4.getKey() > 1000 || SenseMovement4.getValue()> 1000){
+        //             skip4 +=1;
+        //             continue;
+        //         }
+        //         sense4 += SenseMovement4.getKey();
+        //         count4 += SenseMovement4.getValue();
+        //     }
+        //     double AvgSense4 = (sense4 *1.0)/(numberOfTrials4 - skip4);
+        //     double AvgMovement4 = (count4 * 1.0)/ (numberOfTrials4-skip4);
+        //     System.out.print("Bot2 Moving Mice Average Sense: " + AvgSense4 + " Average Movement: " + AvgMovement4 + " Alpha Value: " + k/10);
+        // }
 
 
         /* 
