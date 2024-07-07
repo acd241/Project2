@@ -232,7 +232,6 @@ public class Bot1Test {
                 MousePredict = b.FindHighestProbCell();
                 Path = null;
                 Path = b.ComputePath(t.edgeTo, t.adjecencyGrid[b.GetBotPos().getKey()][b.GetBotPos().getValue()], t.adjecencyGrid[MousePredict.getKey()][MousePredict.getValue()]);
-
                 for(int i = 0; i<Path.size(); i++){
                     count +=1;
                     Pair next = b.GridLocationOfPath(Path.get(i));
@@ -265,6 +264,8 @@ public class Bot1Test {
                 if(Break){
                     break;
                 }
+                
+                
             }
         }
         return new Pair(-1,-1);
@@ -1574,11 +1575,11 @@ public class Bot1Test {
         */
 
         //BOT1 STATIONARY MOUSE TEST VALUES
-        /* 
+        
         Pair SenseMovement = Bot1TestStationaryMouse(0.5);
         System.out.println();
         System.out.print("Stationary Bot 1: Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
-        */
+        
          
         //BOT1 MOVING MICE TEST VALUES
         /* 
@@ -1674,6 +1675,7 @@ public class Bot1Test {
         double AvgMovement4 = (count4 * 1.0)/ (50-skip4);
         System.out.print("Bot1 Moving Mice Average Sense: " + AvgSense4 + " Average Movement: " + AvgMovement4);
         */
+        
 
         
         

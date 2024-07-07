@@ -35,6 +35,41 @@ public class Shiptest {
 
     Random random = new Random();
 
+    public double highestProbabilityValue()
+    {
+        double highest = (double) Integer.MIN_VALUE;
+
+        //if (MouseGrid1 != null)
+        //{
+            for (int i = 0; i < grid.length; i++)
+            {
+                for (int j = 0; j < grid[0].length; j++)
+                {
+                    if (highest < grid[i][j].getProbOfMouse())
+                    {
+                        highest = grid[i][j].getProbOfMouse();
+                    }
+                }
+            }
+        //}
+
+        if (MouseGrid2 != null)
+        {
+            for (int i = 0; i < MouseGrid2.length; i++)
+            {
+                for (int j = 0; j < MouseGrid2[0].length; j++)
+                {
+                    if (highest < MouseGrid2[i][j])
+                    {
+                        highest = MouseGrid2[i][j];
+                    }
+                }
+            }
+        }
+
+        return highest;
+    }
+
     public Shiptest(){
         grid = new Cell[40][40];
         adjecencyGrid = new int [40][40];
