@@ -70,6 +70,37 @@ public class Shiptest {
         return highest;
     }
 
+    public double highestProbabilityValueMice()
+    {
+        double highest = (double) Integer.MIN_VALUE;
+
+        for (int i = 0; i < MouseGrid1.length; i++)
+        {
+            for (int j = 0; j < MouseGrid1[0].length; j++)
+            {
+                if (highest < MouseGrid1[i][j])
+                {
+                    highest = MouseGrid1[i][j];
+                }
+            }
+        }
+
+
+        for (int i = 0; i < MouseGrid2.length; i++)
+        {
+            for (int j = 0; j < MouseGrid2[0].length; j++)
+            {
+                if (highest < MouseGrid2[i][j])
+                {
+                    highest = MouseGrid2[i][j];
+                }
+            }
+        }
+        
+
+        return highest;
+    }
+
     public Shiptest(){
         grid = new Cell[40][40];
         adjecencyGrid = new int [40][40];
