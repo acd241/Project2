@@ -342,6 +342,87 @@ public class Shiptest {
             */
     }
 
+    public void PrintProbabilityMap(){
+        for(int i = 0; i<grid.length; i++){
+            for(int j = 0; j<grid[i].length; j++){
+                System.out.print(grid[i][j].getProbOfMouse() + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void WriteFileInt(boolean IsLayout){
+        if(IsLayout){
+            try (FileWriter csvWriter = new FileWriter("array1.csv")) {
+                for (int i = 0; i < 40; i++) {
+                    for (int j = 0; j < 40; j++) {
+                        csvWriter.append(String.valueOf(grid[i][j].GetState()));
+                        if (j < 39) {
+                            csvWriter.append(",");
+                        }
+                    }
+                    csvWriter.append("\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            try (FileWriter csvWriter = new FileWriter("array2.csv")) {
+                for (int i = 0; i < 40; i++) {
+                    for (int j = 0; j < 40; j++) {
+                        if(isBot(i,j)){
+                            csvWriter.append(String.valueOf(1));
+                            if (j < 39) {
+                                csvWriter.append(",");
+                            }
+                        }
+                        else{
+                            csvWriter.append(String.valueOf(0));
+                            if (j < 39) {
+                                csvWriter.append(",");
+                            }
+                        }
+                    }
+                    csvWriter.append("\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void WriteFileDouble(Cell [][] g){
+        try (FileWriter csvWriter = new FileWriter("array3.csv")) {
+            for (int i = 0; i < 40; i++) {
+                for (int j = 0; j < 40; j++) {
+                    csvWriter.append(String.valueOf(g[i][j].getProbOfMouse()));
+                    if (j < 39) {
+                        csvWriter.append(",");
+                    }
+                }
+                csvWriter.append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void WriteFilealpha(double alpha){
+        try (FileWriter csvWriter = new FileWriter("array4.csv")) {
+            for (int i = 0; i < 40; i++) {
+                for (int j = 0; j < 40; j++) {
+                    csvWriter.append(String.valueOf(alpha));
+                    if (j < 39) {
+                        csvWriter.append(",");
+                    }
+                }
+                csvWriter.append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void AdjGrid(){
         int x = 0;
         for(int i = 0; i <grid.length; i++){

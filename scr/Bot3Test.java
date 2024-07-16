@@ -365,6 +365,11 @@ public class Bot3Test {
         Mouse m1 = new Mouse(t);
         t.StartingProbabilities();
         t.PrintShip(t.grid);
+        t.PrintProbabilityMap();
+        t.WriteFileDouble(t.grid);
+        t.WriteFileInt(true);
+        t.WriteFileInt(false);
+        t.WriteFilealpha(alpha);
 
         boolean hasBeeped = false;
         int count = 0;
@@ -3668,11 +3673,11 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
         */
 
         //BOT3 STATIONARY MOUSE TEST VALUES
-        /* 
+         
         Pair SenseMovement = Bot3TestStationaryMouse(0.5);
         System.out.println();
         System.out.print("Stationary Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
-        */
+        
          
         //BOT3 MOVING MICE TEST VALUES
         /* 
@@ -3751,7 +3756,7 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
         */
 
         //BOT3 MOVING MICE AVG TEST VALUES
-        
+        /* 
         int sense4 = 0;
         int count4 = 0;
         int skip4 = 0;
@@ -3767,7 +3772,7 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
         double AvgSense4 = (sense4 *1.0)/(50 - skip4);
         double AvgMovement4 = (count4 * 1.0)/ (50-skip4);
         System.out.print("Bot3 Moving Mice Average Sense: " + AvgSense4 + " Average Movement: " + AvgMovement4);
-        
+        */
     }
         
 
