@@ -815,3 +815,135 @@ public class Shiptest {
    
 
 }
+
+
+
+/*
+ * class Custom2DDataset(Dataset):
+    def __init__(self, array1, array2, array3, array4, transform=None):
+        self.array1 = array1
+        self.array2 = array2
+        self.array3 = array3
+        self.array4 = array4
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.array1)
+
+    def __getitem__(self, idx):
+        sample = {
+            'array1': torch.tensor(self.array1[idx], dtype=torch.float32),
+            'array2': torch.tensor(self.array2[idx], dtype=torch.float32),
+            'array3': torch.tensor(self.array3[idx], dtype=torch.float32),
+            'array4': torch.tensor(self.array4[idx], dtype=torch.float32)
+        }
+        if self.transform:
+            sample = self.transform(sample)
+        return sample
+
+# Example usage
+import numpy as np
+
+array1 = np.loadtxt('array1.csv', delimiter=',', dtype=int)
+array2 = np.loadtxt('array2.csv', delimiter=',', dtype=int)
+array3 = np.loadtxt('array3.csv', delimiter=',', dtype=float)
+array4 = np.loadtxt('array4.csv', delimiter=',', dtype=float)
+
+print(array1)
+print(array1.shape)
+print(array2)
+print(array2.shape)
+print(array3)
+print(array3.shape)
+print(array4)
+print(array4.shape)
+
+
+dataset = Custom2DDataset(array1, array2, array3, array4)
+dataloader = DataLoader(dataset, batch_size=2, shuffle=True)
+
+for batch in dataloader:
+    print(batch)
+
+
+class Custom2DDataset(Dataset):
+    def __init__(self, arrays, labels, transform=None):
+        self.arrays = arrays
+        self.labels = labels
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        sample = torch.tensor(self.arrays[idx], dtype=torch.float32)
+        label = torch.tensor(self.labels[idx], dtype=torch.long)
+        if self.transform:
+            sample = self.transform(sample)
+        return sample, label
+
+# Example usage
+import numpy as np
+
+
+array1 = np.loadtxt('array1.csv', delimiter=',', dtype=int)
+array2 = np.loadtxt('array2.csv', delimiter=',', dtype=int)
+array3 = np.loadtxt('array3.csv', delimiter=',', dtype=float)
+array4 = np.loadtxt('array4.csv', delimiter=',', dtype=float)
+
+stacked_input = np.stack([array1, array2, array3, array4], axis=0)
+
+
+stacked_inputs = np.stack([stacked_input] * 1000, axis=0)
+output_actions = np.random.randint(0, 5, size=(1000,))
+
+
+print(array1)
+print(array1.shape)
+print(array2)
+print(array2.shape)
+print(array3)
+print(array3.shape)
+print(array4)
+print(array4.shape)
+
+
+dataset = Custom2DDataset(stacked_inputs, output_actions)
+
+
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super(SimpleCNN, self).__init__()
+
+        # Define the CNN layers
+        #self.conv1 = nn.Conv2d(4, 8, kernel_size=3, padding=1)  # 4 input channels
+        #self.conv2 = nn.Conv2d(8, 16, kernel_size=3, padding=1)
+
+        # Define the fully connected layers
+        self.fc1 = nn.Linear(4 * 40 * 40, 512)
+        self.fc2 = nn.Linear(512, 256)
+        self.fc3 = nn.Linear(256, 128)
+        self.fc4 = nn.Linear(128, 64)  # Adjust the input size based on the output size after conv layers
+        self.fc5 = nn.Linear(64, 5)  # 5 output classes
+
+    def forward(self, x):
+        #x = F.relu(self.conv1(x))
+        #x = F.max_pool2d(x, 2)
+        #x = F.relu(self.conv2(x))
+        #x = F.max_pool2d(x, 2)
+
+        x = x.view(x.size(0), -1)  # Flatten the tensor
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        x = F.relu(self.fc4(x))
+        x = self.fc5(x)
+        return x
+
+# Create the model
+dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+model = SimpleCNN()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.1)
+
+ */
