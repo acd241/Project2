@@ -205,6 +205,31 @@ public class Shiptest {
         visited = new boolean [AdjList.size()];
         edgeTo = new int [AdjList.size()];
     }
+
+    public Shiptest(boolean b){
+        grid = new Cell[40][40];
+        adjecencyGrid = new int [40][40];
+        int x = random.nextInt(5);
+        int y = random.nextInt(5);
+        PopulateShip(grid);
+        grid[x][y].SetState(Open);
+        ExploreShip();
+        IdentifyDeadEnds();
+        AddExtraOpenCells();
+        OpenCells = LabelAllOpenCells();
+        IdentifyDeadEnds();
+        int [][] g = SetGrid1("array1.csv");
+        SwapGrids(g);
+        OpenCells = LabelAllOpenCells();
+        AdjustOpenCells();
+        AdjGrid();
+        AdjParList();
+        ArrayList<LL> temp = AdjList1();
+        AdjList = AdjList2(temp);
+        StartingProbabilities();
+        visited = new boolean [AdjList.size()];
+        edgeTo = new int [AdjList.size()];
+    }
     
 
     public void StartingProbabilities(){
@@ -216,6 +241,17 @@ public class Shiptest {
                 }
                 else{
                     grid[i][j].setProbOfMouse(0.000);
+                }
+            }
+        }
+    }
+
+    public void AdjustOpenCells(){
+        totalOpenCells = 0;
+        for(int i = 0; i<grid.length; i++){
+            for (int j = 0; j<grid[i].length; j++){
+                if(isOpen(i,j) || isBot(i,j)|| isDeadEnd(i, j) || isMouse(i, j)){
+                    totalOpenCells+=1;
                 }
             }
         }
@@ -349,6 +385,44 @@ public class Shiptest {
             }
             System.out.println();
         }
+    }
+
+    public void SwapGrids(int [][] g){
+        if(g.length != grid.length){
+            return;
+        }
+        else{
+            for(int i = 0; i<g.length; i++){
+                for(int j = 0; j<g[i].length; j++){
+                    grid[i][j].SetState(g[i][j]);
+                }
+            }
+        }
+    }
+
+    public int [][] SetGrid1(String filename){ //throws FileNotFoundException, IOException{
+        int [][] g = new int [40][40];
+        try{
+            BufferedReader b = new BufferedReader(new FileReader(filename));
+            String l = null;
+            int row = 0;
+            while((l =b.readLine()) != null){
+                String newString = l.replaceAll(",", "");
+                for(int z = 0; z<newString.length(); z++){
+                    String s1 = newString.substring(z, z+1);
+                    g[row][z] = Integer.parseInt(s1);
+                }
+                row++; 
+            }
+            b.close();
+            return g;
+        }catch(FileNotFoundException e){
+            System.out.print(e);
+        }
+        catch (IOException e1) {
+            System.out.print(e1);
+        }
+        return g;
     }
 
     public void WriteFileInt(boolean IsLayout){
@@ -807,6 +881,9 @@ public class Shiptest {
                     Pair p = new Pair(i,j);
                     a.add(p);
                     grid[i][j].SetState(Open);
+                }
+                else if(isBot(i,j)){
+
                 }
             }
         }

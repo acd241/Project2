@@ -13,6 +13,16 @@ public class Bot {
         StartingBotPosition();
     }
 
+    public Bot(Shiptest t, boolean b){
+        this.s = t;
+        this.pos = new Pair(14,18);
+        s.BotPosition = this.pos;
+        String coord = this.pos.getKey() + "," + this.pos.getValue();
+        CellsTraversed.add(coord);
+        s.grid[this.pos.getKey()][this.pos.getValue()].SetState(3);
+        s.grid[this.pos.getKey()][this.pos.getValue()].setBot(true);
+    }
+
     public void StartingBotPosition(){
         int x = random.nextInt(s.OpenCells.size());
         Pair temp = s.OpenCells.get(x);

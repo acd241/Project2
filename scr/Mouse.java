@@ -11,7 +11,13 @@ public class Mouse {
         StartingMousePosition();
     }
 
-
+    public Mouse(Shiptest t, boolean b){
+        this.s = t;
+        this.pos = new Pair(23,12);
+        s.StartingMousePos = this.pos;
+        s.grid[this.pos.getKey()][this.pos.getValue()].SetState(5);
+        s.grid[this.pos.getKey()][this.pos.getValue()].setMouse(true);
+    }
     public Pair StartingMousePosition(){
         while(true){
             int x = random.nextInt(s.OpenCells.size());
