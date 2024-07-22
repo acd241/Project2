@@ -625,18 +625,18 @@ public class Bot3TestPrint {
 
                 //}
                 if((b.GetBotPos().getKey()-1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                    move = "1";//up
+                    move = "0";//up
 
                 }
                 if((b.GetBotPos().getKey()+1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                move = "2"; //down
+                move = "1"; //down
                 }
                 if(b.GetBotPos().getKey() == next.getKey() && (b.GetBotPos().getValue()-1) == next.getValue()){
-                    move = "3"; //left
+                    move = "2"; //left
 
                 }
                 if((b.GetBotPos().getKey()) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
-                    move = "4"; //right
+                    move = "3"; //right
                 }
 
                 b.MoveBotStationary(next);
@@ -669,7 +669,7 @@ public class Bot3TestPrint {
                 int sense = 0;
                 for(int j = 0; j<1000; j++){
                     //t.PrintShip(t.grid);
-                    move = "5";
+                    move = "4";
  
                     sense+=1;
                     hasBeeped = b.Sense(alpha, t.StartingMousePos);
@@ -746,18 +746,18 @@ public class Bot3TestPrint {
                             Pair next = b.GridLocationOfPath(Path.get(i));
 
                             if((b.GetBotPos().getKey()-1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                                move = "1";//up
+                                move = "0";//up
     
                             }
                             if((b.GetBotPos().getKey()+1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                            move = "2"; //down
+                            move = "1"; //down
                             }
                             if(b.GetBotPos().getKey() == next.getKey() && (b.GetBotPos().getValue()-1) == next.getValue()){
-                                move = "3"; //left
+                                move = "2"; //left
     
                             }
                             if((b.GetBotPos().getKey()) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
-                                move = "4"; //right
+                                move = "3"; //right
                             }
 
                             b.MoveBotStationary(next);
@@ -797,7 +797,7 @@ public class Bot3TestPrint {
                     probMapCSV = "";
 
                     
-                    move = "5";
+                    move = "4";
                     b.UpdateProbabilitiesStationary(hasBeeped, alpha, 1, b.GetCellsTraversed());
                     //b.UpdateProbabilitiesMoving(hasBeeped, 0.5, 1);
                     t.DeInitilizeEdge(t.edgeTo);
@@ -857,18 +857,18 @@ public class Bot3TestPrint {
                         Pair next = b.GridLocationOfPath(Path.get(i));
 
                         if((b.GetBotPos().getKey()-1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                            move = "1";//up
+                            move = "0";//up
 
                         }
                         if((b.GetBotPos().getKey()+1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                        move = "2"; //down
+                        move = "1"; //down
                         }
                         if(b.GetBotPos().getKey() == next.getKey() && (b.GetBotPos().getValue()-1) == next.getValue()){
-                            move = "3"; //left
+                            move = "2"; //left
 
                         }
                         if((b.GetBotPos().getKey()) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
-                            move = "4"; //right
+                            move = "3"; //right
                         }
 
                         b.MoveBotStationary(next);
@@ -969,18 +969,18 @@ public class Bot3TestPrint {
                             Pair next = b.GridLocationOfPath(Path.get(0));
 
                             if((b.GetBotPos().getKey()-1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                                move = "1";//up
-
+                                move = "0";//up
+    
                             }
                             if((b.GetBotPos().getKey()+1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                            move = "2"; //down
+                            move = "1"; //down
                             }
                             if(b.GetBotPos().getKey() == next.getKey() && (b.GetBotPos().getValue()-1) == next.getValue()){
-                                move = "3"; //left
-
+                                move = "2"; //left
+    
                             }
-                            if((b.GetBotPos().getKey()-1) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
-                                move = "4"; //right
+                            if((b.GetBotPos().getKey()) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
+                                move = "3"; //right
                             }
 
                             b.MoveBotStationary(next);
