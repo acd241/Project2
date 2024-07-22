@@ -6,7 +6,7 @@ public class Cell {
     private double probOfMouse; 
 
     public Cell(Pair p1, int Value, boolean b, boolean m1){
-        this.pos   = p1;
+        this.pos = p1;
         this.state = Value;
         this.bot = b;
         this.mouse = m1;

@@ -549,8 +549,8 @@ public class Bot3TestPrint {
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) 
         {
-            writer.println("Grid State, Alpha Value, Bot Location, Probability Map, Count, Move");
-            writer.flush();
+            //writer.println("Grid State, Alpha Value, Bot Location, Probability Map, Count, Move");
+            //writer.flush();
 
             //writer.println(Grid + ", " + Alpha + ", " + Botlo + ", " + Probmap + ", " + Move );
             // writer.println("Step T: " + globalCounter + ", " + Grid State: " + gridCSV + "+ ", "  + "Alpha Value: " + alpha + ", " +
@@ -629,13 +629,13 @@ public class Bot3TestPrint {
 
                 }
                 if((b.GetBotPos().getKey()+1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
-                   move = "2"; //down
+                move = "2"; //down
                 }
                 if(b.GetBotPos().getKey() == next.getKey() && (b.GetBotPos().getValue()-1) == next.getValue()){
                     move = "3"; //left
 
                 }
-                if((b.GetBotPos().getKey()-1) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
+                if((b.GetBotPos().getKey()) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
                     move = "4"; //right
                 }
 
@@ -644,9 +644,7 @@ public class Bot3TestPrint {
                 // ADD CSV ROW HERE
                 globalCounter++;
 
-                writer.println("Step T: " + globalCounter + ", " + "Grid State: " + gridCSV + ",  " + "Alpha Value: " + alpha + ", " +
-                "Bot Location: " + botLocCSV + ", " + "Probability Map: " + probMapCSV + ", " + "Move: " + move );
-                writer.flush();
+                writer.println(gridCSV + ",  "   +botLocCSV + ", " + probMapCSV + ", "  + move );
 
                 //b.MoveBot(next);
                 if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
@@ -749,30 +747,28 @@ public class Bot3TestPrint {
 
                             if((b.GetBotPos().getKey()-1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
                                 move = "1";//up
-
+    
                             }
                             if((b.GetBotPos().getKey()+1) == next.getKey() && b.GetBotPos().getValue() == next.getValue()){
                             move = "2"; //down
                             }
                             if(b.GetBotPos().getKey() == next.getKey() && (b.GetBotPos().getValue()-1) == next.getValue()){
                                 move = "3"; //left
-
+    
                             }
-                            if((b.GetBotPos().getKey()-1) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
+                            if((b.GetBotPos().getKey()) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
                                 move = "4"; //right
                             }
 
-                            
+                            b.MoveBotStationary(next);
                             //b.MoveBot(next);
                             
                             // ADD CSV ROW HERE
                             globalCounter++;
 
-                            writer.println("Step T: " + globalCounter + ", " + "Grid State: " + gridCSV + ",  " + "Alpha Value: " + alpha + ", " +
-                            "Bot Location: " + botLocCSV + ", " + "Probability Map: " + probMapCSV + ", " + "Move: " + move );
-                            writer.flush();
+                            writer.println(gridCSV + ",  "   +botLocCSV + ", " + probMapCSV + ", "  + move );
 
-                            b.MoveBotStationary(next);
+                        
 
                             
                             if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
@@ -831,9 +827,7 @@ public class Bot3TestPrint {
                     // ADD CSV ROW HERE
                     globalCounter++;
 
-                    writer.println("Step T: " + globalCounter + ", " + "Grid State: " + gridCSV + ",  " + "Alpha Value: " + alpha + ", " +
-                    "Bot Location: " + botLocCSV + ", " + "Probability Map: " + probMapCSV + ", " + "Move: " + move );
-                    writer.flush();
+                    writer.println(gridCSV + ",  "   +botLocCSV + ", " + probMapCSV + ", "  + move );
 
 
                     System.out.println("Path Size 3/4: " + (int)(Path.size()*(0.75)));
@@ -873,7 +867,7 @@ public class Bot3TestPrint {
                             move = "3"; //left
 
                         }
-                        if((b.GetBotPos().getKey()-1) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
+                        if((b.GetBotPos().getKey()) == next.getKey() && (b.GetBotPos().getValue()+1) == next.getValue()){
                             move = "4"; //right
                         }
 
@@ -883,9 +877,7 @@ public class Bot3TestPrint {
                         // ADD CSV ROW HERE
                         globalCounter++;
 
-                        writer.println("Step T: " + globalCounter + ", " + "Grid State: " + gridCSV + ",  " + "Alpha Value: " + alpha + ", " +
-                        "Bot Location: " + botLocCSV + ", " + "Probability Map: " + probMapCSV + ", " + "Move: " + move );
-                        writer.flush();
+                        writer.println(gridCSV + ",  "   +botLocCSV + ", " + probMapCSV + ", "  + move );
 
 
                         if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
@@ -950,9 +942,7 @@ public class Bot3TestPrint {
                             sense +=1;
                             globalCounter++;
 
-                            writer.println("Step T: " + globalCounter + ", " + "Grid State: " + gridCSV + ",  " + "Alpha Value: " + alpha + ", " +
-                            "Bot Location: " + botLocCSV + ", " + "Probability Map: " + probMapCSV + ", " + "Move: " + move );
-                            writer.flush();
+                            writer.println(gridCSV + ",  "   +botLocCSV + ", " + probMapCSV + ", "  + move );
                             // ADD CSV ROW HERE
                         }
                         else if(i%2 == 1){
@@ -999,10 +989,8 @@ public class Bot3TestPrint {
                             // ADD CSV ROW HERE
                             globalCounter++;
 
-                            writer.println("Step T: " + globalCounter + ", " + "Grid State: " + gridCSV + ",  " + "Alpha Value: " + alpha + ", " +
-                            "Bot Location: " + botLocCSV + ", " + "Probability Map: " + probMapCSV + ", " + "Move: " + move );
-                            writer.flush();
-                            b.MoveBotStationary(next);
+                            writer.println(gridCSV + ",  "   +botLocCSV + ", " + probMapCSV + ", "  + move );
+                            //b.MoveBotStationary(next);
 
 
                             if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
