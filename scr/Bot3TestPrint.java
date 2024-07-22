@@ -542,8 +542,8 @@ public class Bot3TestPrint {
         return new Pair(-1,-1);
     }
 
-    public static Pair Bot3TestStationaryMouseCSV(double alpha){
-        String fileName = "data1.csv";
+    public static Pair Bot3TestStationaryMouseCSV(double alpha, int w){
+        String fileName = "datatest" + w + ".csv";
         int globalCounter = 0;
         System.out.println(fileName);
 
@@ -4677,10 +4677,11 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
         */
 
         //BOT3 STATIONARY MOUSE TEST VALUES
-        Pair SenseMovement = Bot3TestStationaryMouseCSV(0.5);
-        System.out.println();
-        System.out.print("Stationary Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
-
+        for(int w = 0; w<10; w++){
+            Pair SenseMovement = Bot3TestStationaryMouseCSV(0.5, w);
+            System.out.println();
+            System.out.print("Stationary Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
+        }
         //Pair SenseMovement2 = Bot3TestMovingMouseCSV(0.5);
         //System.out.println();
         //System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
