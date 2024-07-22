@@ -648,7 +648,7 @@ public class Bot3TestPrint {
 
                 //b.MoveBot(next);
                 if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                    System.out.print("BOT FOUND THE MOUSE. Sense: 0 Movement: " + count);
+                    //System.out.print("BOT FOUND THE MOUSE. Sense: 0 Movement: " + count);
                     Break = true;
                     alreadyFoundMouse =true;
                     return new Pair(0,count);
@@ -656,13 +656,13 @@ public class Bot3TestPrint {
                 //Pair nextMouseMove = m.PickRandomNeighbor(m1.GetMousePos().getKey(), m1.GetMousePos().getValue());
                 //m1.MoveMouse1(nextMouseMove);
                 if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                    System.out.print("BOT FOUND THE MOUSE. Sense: 0 Movement: " + count);
+                    //System.out.print("BOT FOUND THE MOUSE. Sense: 0 Movement: " + count);
                     Break = true;
                     alreadyFoundMouse =true;
                     return new Pair(0,count);
                 }
                 else{
-                    t.PrintShip(t.grid);
+                    //t.PrintShip(t.grid);
                 }
             }
             if(!alreadyFoundMouse){
@@ -772,23 +772,23 @@ public class Bot3TestPrint {
 
                             
                             if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                                System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
-                                System.out.println();
-                                t.PrintShip(t.grid);
+                                //System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                                //System.out.println();
+                                //t.PrintShip(t.grid);
                                 Break = true;
                                 return new Pair(sense, count);
                             }
                             //Pair nextMouseMove = m.PickRandomNeighbor(m1.GetMousePos().getKey(), m1.GetMousePos().getValue());
                             //m1.MoveMouse1(nextMouseMove);
                             if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                                System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
-                                System.out.println();
-                                t.PrintShip(t.grid);
+                                //System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                                //System.out.println();
+                                //t.PrintShip(t.grid);
                                 Break = true;
                                 return new Pair(sense, count);
                             }
                             else{
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                             }
                         }
                     }
@@ -881,23 +881,23 @@ public class Bot3TestPrint {
 
 
                         if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                            System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
-                            System.out.println();
-                            t.PrintShip(t.grid);
+                            //System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                            //System.out.println();
+                            //t.PrintShip(t.grid);
                             Break = true;
                             return new Pair(sense, count);
                         }
                         //Pair nextMouseMove = m.PickRandomNeighbor(m1.GetMousePos().getKey(), m1.GetMousePos().getValue());
                         //m1.MoveMouse1(nextMouseMove);
                         if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                            System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
-                            System.out.println();
-                            t.PrintShip(t.grid);
+                            //System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                            //System.out.println();
+                            //t.PrintShip(t.grid);
                             Break = true;
                             return new Pair(sense, count);
                         }
                         else{
-                            t.PrintShip(t.grid);
+                            //t.PrintShip(t.grid);
                         }
                     }
                     for(int i = 0; i<(int)((Path.size()*1.0) * (0.3)) + 1; i++){
@@ -905,7 +905,7 @@ public class Bot3TestPrint {
                             botLocCSV = "";
                             probMapCSV = "";
 
-                            move = "5";
+                            move = "4";
 
                             
                             if (t.highestProbabilityValue() > 0.7 || bestProbability)
@@ -994,15 +994,15 @@ public class Bot3TestPrint {
 
 
                             if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
-                                System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
-                                System.out.println();
-                                t.PrintShip(t.grid);
+                                //System.out.print("BOT FOUND THE MOUSE. Sense: " + sense + " Movement: " + count);
+                                //System.out.println();
+                                //t.PrintShip(t.grid);
                                 Break = true;
                                 alreadyFoundMouse = true;
                                 return new Pair(sense, count);
                             }
                             else{
-                                t.PrintShip(t.grid);
+                                //t.PrintShip(t.grid);
                             }
                         }
                         
