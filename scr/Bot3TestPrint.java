@@ -543,7 +543,7 @@ public class Bot3TestPrint {
     }
 
     public static Pair Bot3TestStationaryMouseCSV(double alpha, int w){
-        String fileName = "datatest" + w + ".csv";
+        String fileName = "sdata" + w + ".csv";
         int globalCounter = 0;
         System.out.println(fileName);
 
@@ -4675,13 +4675,35 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
         */
 
         //BOT3 STATIONARY MOUSE TEST VALUES
-        /* 
+        
+        double alpha1 = 0.4;
+        double alpha2 = 0.5;
+        double alpha3 = 0.6;
+        double alpha4 = 0.7;
         for(int w = 0; w<10; w++){
-            Pair SenseMovement = Bot3TestStationaryMouseCSV(0.5, w);
-            System.out.println();
-            System.out.print("Stationary Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement.getKey() + " Movement: " +SenseMovement.getValue());
+            if(w<2){
+                Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha1, w);
+                System.out.println();
+                System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+            }
+            else if(w>1 && w<5){
+                Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha2, w);
+                System.out.println();
+                System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+            }
+            else if(w>4 && w<8){
+                Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha3, w);
+                System.out.println();
+                System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+            }
+            else if(w>7 && w<10){
+                Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha4, w);
+                System.out.println();
+                System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+            }
         }
-        */
+        
+        /* 
         double alpha1 = 0.4;
         double alpha2 = 0.5;
         double alpha3 = 0.6;
@@ -4708,6 +4730,7 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
                 System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
             }
         }
+        */
         //BOT3 MOVING MICE TEST VALUES
         /* 
         Pair SMiceMoving = Bot3TestMovingMice(0.5);
