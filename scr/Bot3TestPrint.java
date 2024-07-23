@@ -6,6 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Random;
 
 public class Bot3TestPrint {
 
@@ -48,7 +51,7 @@ public class Bot3TestPrint {
             {
                 if(input == 0){
                     if(t.InBounds(b.GetBotPos().getKey()-1, b.GetBotPos().getValue())){
-                        if(t.isOpen(b.GetBotPos().getKey()-1, b.GetBotPos().getValue())){
+                        if(t.isOpen(b.GetBotPos().getKey()+1, b.GetBotPos().getValue())){
                             b.MoveBotStationary(new Pair(b.GetBotPos().getKey()-1, b.GetBotPos().getValue()));
                             System.out.println("Bot went up");
                             state = false;
@@ -116,7 +119,6 @@ public class Bot3TestPrint {
                             System.out.println("Bot went right");
                             state = false;
                         }
-                    }
                     else
                     {
                         int other = input;
@@ -149,6 +151,7 @@ public class Bot3TestPrint {
                     input = other;
                 }
             }
+            }
 
             if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
                 System.out.print("BOT FOUND THE MOUSE. Steps: " + globalCounter);
@@ -171,6 +174,7 @@ public class Bot3TestPrint {
                 }
             }
             writer.println(globalCounter + "," + gridCSV + ",  " + alpha + ", "  +botLocCSV + ", " + probMapCSV + ", "  + move );
+            
         }
         catch (IOException e) 
         {
@@ -4961,13 +4965,13 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
         //     }
         // }
 
-       t.StartingProbabilities();
+        t.StartingProbabilities();
         // Scanner in = new Scanner(System.in);
         int input = 0;
         boolean keepLooping = false;
         int counter = 0;
 
-        while (!keepLooping && counter < 5)
+        while (!keepLooping)
         {
             t.PrintShip(t.grid);
             // input = in.nextInt();
@@ -5009,6 +5013,7 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
 
         System.out.println("Out");
         
+        System.out.println("Total Number of Steps: " + counter);
         
         /* 
         double alpha1 = 0.4;
