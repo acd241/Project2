@@ -1,9 +1,179 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Bot3TestPrint {
+
+    static Shiptest t = new Shiptest(true);
+    static Bot b = new Bot(t, true);
+    static Mouse m1 = new Mouse(t, true);
+
+    //up, down, left, right, sense
+    public static void Bot3StationaryModel(double alpha){
+        String fileName = "modstationdata.csv";
+        int globalCounter = 0;
+        System.out.println(fileName);
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) 
+        {
+            Scanner s = new Scanner(System.in);
+            
+            boolean hasBeeped = false;
+            String gridCSV = "";
+            String botLocCSV = "";
+            String probMapCSV = "";
+            String move = "";
+
+            for (int i = 0; i < t.grid.length; i++)
+            {
+                for (int j = 0; j < t.grid[0].length; j++)
+                {
+                    if (t.grid[i][j].GetState() == 0)
+                    {
+                        gridCSV += "0/";
+                    }
+                    else
+                    {
+                        gridCSV += "1/";
+                    }
+                }
+            }
+            int input = s.nextInt();
+            if(input == 0){
+                if(t.InBounds(b.GetBotPos().getKey()-1, b.GetBotPos().getValue())){
+                    b.MoveBotStationary(new Pair(b.GetBotPos().getKey()-1, b.GetBotPos().getValue()));
+                }
+            }
+            else if(input ==1){
+                if(t.InBounds(b.GetBotPos().getKey()+1, b.GetBotPos().getValue())){
+                    b.MoveBotStationary(new Pair(b.GetBotPos().getKey()+1, b.GetBotPos().getValue()));
+                }
+            }
+            else if(input ==2){
+                if(t.InBounds(b.GetBotPos().getKey(), b.GetBotPos().getValue()-1)){
+                    b.MoveBotStationary(new Pair(b.GetBotPos().getKey(), b.GetBotPos().getValue()-1));
+                }
+            }
+            else if(input ==3){
+                if(t.InBounds(b.GetBotPos().getKey(), b.GetBotPos().getValue()+1)){
+                    b.MoveBotStationary(new Pair(b.GetBotPos().getKey(), b.GetBotPos().getValue()+1));
+                }
+            }
+            else if(input ==4){
+                hasBeeped = b.Sense(alpha, t.StartingMousePos);
+                b.UpdateProbabilitiesStationary(hasBeeped, alpha, 1, b.GetCellsTraversed());
+            }
+            if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
+                System.out.print("BOT FOUND THE MOUSE. Steps: " + globalCounter);
+            }
+            for (int y = 0; y < t.grid.length; y++)
+            {
+                for (int z = 0; z < t.grid[0].length; z++)
+                {
+                    if (t.grid[y][z].GetState() == 3)
+                    {
+                        botLocCSV += "1/";
+                    }
+                    else
+                    {
+                        botLocCSV += "0/";
+                    }
+
+                    probMapCSV += t.grid[y][z].getProbOfMouse() + "/";
+                }
+            }
+            writer.println(globalCounter + "," + gridCSV + ",  " + alpha + ", "  +botLocCSV + ", " + probMapCSV + ", "  + move );
+            s.close();
+        }
+        catch (IOException e) 
+        {
+            System.out.println("An error occurred while writing the CSV file.");
+            e.printStackTrace();
+        }
+    }
+
+    public void Bot3MovingModel(int input, double alpha){
+        String fileName = "modmovedata.csv";
+        int globalCounter = 0;
+        System.out.println(fileName);
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) 
+        {
+            Shiptest t = new Shiptest(true);
+            Bot b = new Bot(t, true);
+            Mouse m1 = new Mouse(t, true);
+            t.StartingProbabilities();
+            t.PrintShip(t.grid);
+            boolean hasBeeped = false;
+            String gridCSV = "";
+            String botLocCSV = "";
+            String probMapCSV = "";
+            String move = "";
+
+            for (int i = 0; i < t.grid.length; i++)
+            {
+                for (int j = 0; j < t.grid[0].length; j++)
+                {
+                    if (t.grid[i][j].GetState() == 0)
+                    {
+                        gridCSV += "0/";
+                    }
+                    else
+                    {
+                        gridCSV += "1/";
+                    }
+                }
+            }
+            if(input == 0){
+                if(t.InBounds(b.GetBotPos().getKey()-1, b.GetBotPos().getValue())){
+                    b.MoveBot(new Pair(b.GetBotPos().getKey()-1, b.GetBotPos().getValue()));
+                }
+            }
+            else if(input ==1){
+                if(t.InBounds(b.GetBotPos().getKey()+1, b.GetBotPos().getValue())){
+                    b.MoveBot(new Pair(b.GetBotPos().getKey()+1, b.GetBotPos().getValue()));
+                }
+            }
+            else if(input ==2){
+                if(t.InBounds(b.GetBotPos().getKey(), b.GetBotPos().getValue()-1)){
+                    b.MoveBot(new Pair(b.GetBotPos().getKey(), b.GetBotPos().getValue()-1));
+                }
+            }
+            else if(input ==3){
+                if(t.InBounds(b.GetBotPos().getKey(), b.GetBotPos().getValue()+1)){
+                    b.MoveBot(new Pair(b.GetBotPos().getKey(), b.GetBotPos().getValue()+1));
+                }
+            }
+            else if(input ==4){
+                hasBeeped = b.Sense(alpha, t.StartingMousePos);
+                b.UpdateProbabilitiesMoving(hasBeeped, alpha, 1);
+            }
+            for (int y = 0; y < t.grid.length; y++)
+            {
+                for (int z = 0; z < t.grid[0].length; z++)
+                {
+                    if (t.grid[y][z].GetState() == 3)
+                    {
+                        botLocCSV += "1/";
+                    }
+                    else
+                    {
+                        botLocCSV += "0/";
+                    }
+
+                    probMapCSV += t.grid[y][z].getProbOfMouse() + "/";
+                }
+            }
+            writer.println(globalCounter + "," + gridCSV + ",  " + alpha + ", "  +botLocCSV + ", " + probMapCSV + ", "  + move );
+        }
+        catch (IOException e) 
+        {
+            System.out.println("An error occurred while writing the CSV file.");
+            e.printStackTrace();
+        }
+    }
     
 
 
@@ -4676,31 +4846,39 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
 
         //BOT3 STATIONARY MOUSE TEST VALUES
         
-        double alpha1 = 0.4;
-        double alpha2 = 0.5;
-        double alpha3 = 0.6;
-        double alpha4 = 0.7;
-        for(int w = 0; w<10; w++){
-            if(w<2){
-                Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha1, w);
-                System.out.println();
-                System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
-            }
-            else if(w>1 && w<5){
-                Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha2, w);
-                System.out.println();
-                System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
-            }
-            else if(w>4 && w<8){
-                Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha3, w);
-                System.out.println();
-                System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
-            }
-            else if(w>7 && w<10){
-                Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha4, w);
-                System.out.println();
-                System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
-            }
+        // double alpha1 = 0.4;
+        // double alpha2 = 0.5;
+        // double alpha3 = 0.6;
+        // double alpha4 = 0.7;
+        // for(int w = 0; w<10; w++){
+        //     if(w<2){
+        //         Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha1, w);
+        //         System.out.println();
+        //         System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+        //     }
+        //     else if(w>1 && w<5){
+        //         Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha2, w);
+        //         System.out.println();
+        //         System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+        //     }
+        //     else if(w>4 && w<8){
+        //         Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha3, w);
+        //         System.out.println();
+        //         System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+        //     }
+        //     else if(w>7 && w<10){
+        //         Pair SenseMovement2 = Bot3TestStationaryMouseCSV(alpha4, w);
+        //         System.out.println();
+        //         System.out.print("Moving Bot 3: Total Sensing and Movement values. Sense: " + SenseMovement2.getKey() + " Movement: " +SenseMovement2.getValue());
+        //     }
+        // }
+
+        t.StartingProbabilities();
+        t.PrintShip(t.grid);
+
+        while (true)
+        {
+            Bot3StationaryModel(0.4);
         }
         
         /* 
