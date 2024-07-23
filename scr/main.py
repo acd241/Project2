@@ -1,5 +1,7 @@
+import random
+
 def your_function():
-    return 1
+    return random.randint(0, 4)
 
 if __name__ == "__main__":
     result = your_function()

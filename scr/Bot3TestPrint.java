@@ -4958,7 +4958,7 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
         boolean keepLooping = false;
         int counter = 0;
 
-        while (!keepLooping && counter < 5)
+        while (!keepLooping)
         {
             t.PrintShip(t.grid);
             // input = in.nextInt();
@@ -4998,7 +4998,7 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
             counter++;
         }
 
-        System.out.println("Out");
+        System.out.println("Total Number of Steps: " + counter);
         
         /* 
         double alpha1 = 0.4;
