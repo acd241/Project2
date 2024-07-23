@@ -3,6 +3,9 @@ import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Random;
 
 public class Bot3TestPrint {
 
@@ -11,15 +14,12 @@ public class Bot3TestPrint {
     static Mouse m1 = new Mouse(t, true);
 
     //up, down, left, right, sense
-    public static void Bot3StationaryModel(double alpha){
+    public static boolean Bot3StationaryModel(int input, double alpha){
         String fileName = "modstationdata.csv";
         int globalCounter = 0;
-        System.out.println(fileName);
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) 
-        {
-            Scanner s = new Scanner(System.in);
-            
+        {            
             boolean hasBeeped = false;
             String gridCSV = "";
             String botLocCSV = "";
@@ -40,33 +40,111 @@ public class Bot3TestPrint {
                     }
                 }
             }
-            int input = s.nextInt();
-            if(input == 0){
-                if(t.InBounds(b.GetBotPos().getKey()-1, b.GetBotPos().getValue())){
-                    b.MoveBotStationary(new Pair(b.GetBotPos().getKey()-1, b.GetBotPos().getValue()));
+
+
+            boolean state = true;
+
+            while (state)
+            {
+                if(input == 0){
+                    if(t.ExplorableNeighbor(b.GetBotPos().getKey()-1, b.GetBotPos().getValue())){
+                        b.MoveBotStationary(new Pair(b.GetBotPos().getKey()-1, b.GetBotPos().getValue()));
+                        System.out.println("Bot went up");
+                        state = false;
+                    }
+                    else
+                    {
+                        int other = input;
+                        Random r = new Random();
+    
+                        while (other == input)
+                        {
+                            other = r.nextInt(5);
+                        }
+    
+                        input = other;
+                    }
+                }
+                else if(input ==1){
+                    if(t.ExplorableNeighbor(b.GetBotPos().getKey()+1, b.GetBotPos().getValue())){
+                        b.MoveBotStationary(new Pair(b.GetBotPos().getKey()+1, b.GetBotPos().getValue()));
+                        System.out.println("Bot went down");
+                        state = false;
+                    }
+                    else
+                    {
+                        int other = input;
+                        Random r = new Random();
+    
+                        while (other == input)
+                        {
+                            other = r.nextInt(5);
+                        }
+    
+                        input = other;
+                    }
+                }
+                else if(input ==2){
+                    if(t.ExplorableNeighbor(b.GetBotPos().getKey(), b.GetBotPos().getValue()-1)){
+                        b.MoveBotStationary(new Pair(b.GetBotPos().getKey(), b.GetBotPos().getValue()-1));
+                        System.out.println("Bot went left");
+                        state = false;
+                    }
+                    else
+                    {
+                        int other = input;
+                        Random r = new Random();
+    
+                        while (other == input)
+                        {
+                            other = r.nextInt(5);
+                        }
+    
+                        input = other;
+                    }
+                }
+                else if(input ==3){
+                    if(t.ExplorableNeighbor(b.GetBotPos().getKey(), b.GetBotPos().getValue()+1)){
+                        b.MoveBotStationary(new Pair(b.GetBotPos().getKey(), b.GetBotPos().getValue()+1));
+                        System.out.println("Bot went right");
+                        state = false;
+                    }
+                    else
+                    {
+                        int other = input;
+                        Random r = new Random();
+    
+                        while (other == input)
+                        {
+                            other = r.nextInt(5);
+                        }
+    
+                        input = other;
+                    }
+                }
+                else if(input ==4){
+                    hasBeeped = b.Sense(alpha, t.StartingMousePos);
+                    b.UpdateProbabilitiesStationary(hasBeeped, alpha, 1, b.GetCellsTraversed());
+                    System.out.println("Bot sensed");
+                    state = false;
+                }
+                else
+                {
+                    int other = input;
+                    Random r = new Random();
+
+                    while (other == input)
+                    {
+                        other = r.nextInt(5);
+                    }
+
+                    input = other;
                 }
             }
-            else if(input ==1){
-                if(t.InBounds(b.GetBotPos().getKey()+1, b.GetBotPos().getValue())){
-                    b.MoveBotStationary(new Pair(b.GetBotPos().getKey()+1, b.GetBotPos().getValue()));
-                }
-            }
-            else if(input ==2){
-                if(t.InBounds(b.GetBotPos().getKey(), b.GetBotPos().getValue()-1)){
-                    b.MoveBotStationary(new Pair(b.GetBotPos().getKey(), b.GetBotPos().getValue()-1));
-                }
-            }
-            else if(input ==3){
-                if(t.InBounds(b.GetBotPos().getKey(), b.GetBotPos().getValue()+1)){
-                    b.MoveBotStationary(new Pair(b.GetBotPos().getKey(), b.GetBotPos().getValue()+1));
-                }
-            }
-            else if(input ==4){
-                hasBeeped = b.Sense(alpha, t.StartingMousePos);
-                b.UpdateProbabilitiesStationary(hasBeeped, alpha, 1, b.GetCellsTraversed());
-            }
+
             if(t.grid[b.GetBotPos().getKey()][b.GetBotPos().getValue()].hasMouse()){
                 System.out.print("BOT FOUND THE MOUSE. Steps: " + globalCounter);
+                return true;
             }
             for (int y = 0; y < t.grid.length; y++)
             {
@@ -85,13 +163,14 @@ public class Bot3TestPrint {
                 }
             }
             writer.println(globalCounter + "," + gridCSV + ",  " + alpha + ", "  +botLocCSV + ", " + probMapCSV + ", "  + move );
-            s.close();
         }
         catch (IOException e) 
         {
             System.out.println("An error occurred while writing the CSV file.");
             e.printStackTrace();
         }
+
+        return false;
     }
 
     public void Bot3MovingModel(int input, double alpha){
@@ -4874,12 +4953,52 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
         // }
 
         t.StartingProbabilities();
-        t.PrintShip(t.grid);
+        // Scanner in = new Scanner(System.in);
+        int input = 0;
+        boolean keepLooping = false;
+        int counter = 0;
 
-        while (true)
+        while (!keepLooping && counter < 5)
         {
-            Bot3StationaryModel(0.4);
+            t.PrintShip(t.grid);
+            // input = in.nextInt();
+
+            try
+            {
+                String path = "./main.py";
+                String executable = "python";
+
+                ProcessBuilder processBuilder = new ProcessBuilder(executable, path);
+                processBuilder.redirectErrorStream(true);
+
+                Process process = processBuilder.start();
+
+                input = 0;
+
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) 
+                {
+                    String line;
+
+                    while ((line = reader.readLine()) != null) 
+                    {
+                        System.out.println(line);
+                        input = Integer.parseInt(line);
+                    }
+                }
+
+                int ec = process.waitFor();
+                System.out.println("Process exited with code: " + ec);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            keepLooping = Bot3StationaryModel(input, 0.4);
+            counter++;
         }
+
+        System.out.println("Out");
         
         /* 
         double alpha1 = 0.4;

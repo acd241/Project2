@@ -674,7 +674,7 @@ public class Shiptest {
     public boolean ExplorableNeighbor(int row, int col){
         if(0<=row && row <grid.length){
             if(0<=col && col<grid.length){
-                if(isClosed(row,col) == true){
+                if(isClosed(row,col) != true){
                     return true;
                 }
                 return false;
