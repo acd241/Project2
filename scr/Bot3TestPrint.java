@@ -17,7 +17,7 @@ public class Bot3TestPrint {
     static Mouse m1 = new Mouse(t, true);
 
     //up, down, left, right, sense
-    public static boolean Bot3StationaryModel(int input, double alpha){
+    public static boolean Bot3StationaryModel(int step, int input, double alpha){
         String fileName = "modstationdata.csv";
         int globalCounter = 0;
 
@@ -173,7 +173,7 @@ public class Bot3TestPrint {
                     probMapCSV += t.grid[y][z].getProbOfMouse() + "/";
                 }
             }
-            writer.println(globalCounter + "," + gridCSV + ",  " + alpha + ", "  +botLocCSV + ", " + probMapCSV + ", "  + move );
+            writer.println(step + "," + gridCSV + ",  " + alpha + ", "  +botLocCSV + ", " + probMapCSV + ", "  + move );
             
         }
         catch (IOException e) 
@@ -5007,7 +5007,7 @@ public static Pair Bot3TestStationaryMouseAVG(double alpha){
                 e.printStackTrace();
             }
 
-            keepLooping = Bot3StationaryModel(input, 0.4);
+            keepLooping = Bot3StationaryModel(counter, input, 0.4);
             counter++;
         }
 
